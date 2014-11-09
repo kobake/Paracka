@@ -1,6 +1,6 @@
 #include "main.h"
-#include "win/DropFiles.h"
-#include "util/mywstring.h"
+#include "src/CDropFiles.h"
+#include <StringLib.h>
 
 Font font(L"‚l‚r ƒSƒVƒbƒN",9);
 
@@ -242,7 +242,7 @@ void MainWindow::fileLoad(const wstring& fpath)
 
 LRESULT MainWindow::onDropFiles(UINT msg,WPARAM wParam,LPARAM lParam)
 {
-	DropFiles drop((HDROP)wParam);
+	CDropFiles drop((HDROP)wParam);
 	if(drop.size()>0){
 		app->fs->GetPath().SetFullPath(drop.GetPath(0));
 		fileLoad(app->fs->GetPath().GetFullPath());

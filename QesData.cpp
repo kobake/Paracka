@@ -1,6 +1,6 @@
 #include "include_com.h"
 #include "QesData.h"
-#include "util/mywstring.h"
+#include <StringLib.h>
 
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //

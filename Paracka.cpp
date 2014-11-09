@@ -5,7 +5,7 @@ Paracka::Paracka(HINSTANCE _hInst,HINSTANCE _hPrevInst,const wchar_t *_softname,
 {
 	fs=new FileDialog(L"Paracka Text File (*.txt)\0*.txt\0Any File (*.*)\0*.*\0\0",L"txt");
 	fs->GetPath().SetTitle(L"...");
-	fs->GetPath().SetDirPath(inifile->getString(L"path",L"lastdir",getExeDir().c_str()).c_str());
+	fs->GetPath().SetDirPath(inifile->GetString(L"path",L"lastdir",getExeDir().c_str()).c_str());
 }
 
 Paracka::~Paracka()

@@ -5,7 +5,8 @@
 #define app ((Paracka*)app)
 
 //class FileSelectDialog;
-#include "win/dlg/FileDialog.h"
+#include "WinSystemLib.h"
+#include "src/dlg/FileDialog.h"
 
 class Paracka : public App{
 public:
