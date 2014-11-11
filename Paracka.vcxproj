@@ -77,7 +77,7 @@
       <AdditionalIncludeDirectories>C:\sites\~Lib\c2lib</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>commonlibD.lib;WSOCK32.LIB;WININET.LIB;WINMM.LIB;COMCTL32.LIB;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>WSOCK32.LIB;WININET.LIB;WINMM.LIB;COMCTL32.LIB;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>.\Debug/Paracka.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -176,6 +176,26 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="main.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\commonlib\commonlib.vcxproj">
+      <Project>{72c7bd39-4973-4026-9d47-4dd95e76a544}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\~Lib\c2lib\_workspace\c2lib.vcxproj">
+      <Project>{bfad9e9a-f51c-4498-86ed-6ca20031d699}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\~Lib\GraphicsLib\GraphicsLib.vcxproj">
+      <Project>{9d2edb24-85d5-4979-83e2-f8b1176e83bf}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\~Lib\IoLib\IoLib.vcxproj">
+      <Project>{bb458969-5ac9-4f24-8ec0-e0440ccfda70}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\~Lib\StringLib\StringLib.vcxproj">
+      <Project>{287ecc83-7837-4e07-b62f-73bdf10b6341}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\~Lib\WinSystemLib\WinSystemLib.vcxproj">
+      <Project>{4ee1cfb9-db66-4e57-b0a4-4c567fa1962a}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
