@@ -58,7 +58,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>C:\boost_1_55_0;C:\sites\commonlib\src;C:\sites\~Lib\c2lib;C:\sites\~Lib\DbLib;C:\sites\~Lib\DebugLib;C:\sites\~Lib\GraphicsLib;C:\sites\~Lib\IoLib;C:\sites\~Lib\LayoutLib;C:\sites\~Lib\LogLib;C:\sites\~Lib\MathLib;C:\sites\~Lib\MemoryLib;C:\sites\~Lib\NetworkLib;C:\sites\~Lib\StringLib;C:\sites\~Lib\TestLib;C:\sites\~Lib\ThreadLib;C:\sites\~Lib\WinSystemLib;C:\sites\~Lib\XmlLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;WINVER=0x0501;_WIN32_WINNT=0x0501;WIN32_LEAN_AND_MEAN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>
