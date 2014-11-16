@@ -161,7 +161,7 @@ bool QesData::read(FileStream *in)
 	int is_comment=0;
 	while(*p!='\0'){
 		if(is_comment==0){
-			//コメント検出
+			//コメント検出 (//または#)
 			if(*p=='/'){
 				if(*(p+1)=='/'){
 					is_comment=1;
@@ -172,6 +172,11 @@ bool QesData::read(FileStream *in)
 					is_text=0;
 					continue;
 				}
+			}
+			else if(*p == '#'){
+				is_comment = 1;
+				is_text = 0;
+				continue;
 			}
 			//トークン検出
 			if(*p==L'\\'){
