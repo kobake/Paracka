@@ -8,8 +8,7 @@
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 QesData::QesData()
 {
-	list=NULL;
-	nlist=0;
+	list.clear();
 	ans_flag=0;
 	//
 	turned=0;
@@ -22,9 +21,7 @@ QesData::~QesData()
 
 void QesData::dispose()
 {
-	for(int i=0;i<nlist;i++)list[i].dispose();
-	m_free(list);
-	nlist=0;
+	list.clear();
 	ans_flag=0;
 //	turned=0;
 }
@@ -36,13 +33,13 @@ void QesData::dispose()
 int QesData::getAllNum()
 {
 	if(ans_flag==0){
-		return nlist;
+		return (int)list.size();
 	}else{
-		return nlist-1;
+		return (int)list.size() - 1;
 	}
 }
 
-const wchar_t *QesData::getQes(int index)
+mystring QesData::getQes(int index)
 {
 	if(index>=0 && index<getAllNum()){
 		if(turned==0){
@@ -55,7 +52,7 @@ const wchar_t *QesData::getQes(int index)
 	}
 }
 
-const wchar_t *QesData::getAns(int q_index,int a_index)
+mystring QesData::getAns(int q_index,int a_index)
 {
 	if(q_index>=0 && q_index<getAllNum()){
 		if(turned==0){
@@ -87,19 +84,25 @@ void QesData::_listDeleteAll()
 void QesData::_listAdd(const wchar_t *p)
 {
 	if(ans_flag==0){
+		/*
 		nlist++;
 		if(nlist % 256==1){
 			list=(QA*)realloc(list,sizeof(QA)*(nlist+255));
 		}
 		list[nlist-1].zero();
+		*/
+		list.push_back(QA());
+		QA& qa = list.back();
+
+
 		if(p[0]!='@'){
 			//単語モード
-			list[nlist-1].set_kind(0);
-			list[nlist-1].put_q(p);
+			qa.set_kind(0);
+			qa.put_q(p);
 			ans_flag=1;
 		}else{
 			//穴埋めモード
-			list[nlist-1].set_kind(1);
+			qa.set_kind(1);
 			//
 			p++;
 			//問題 p の中から解答「(x)」を抜き出す
@@ -125,7 +128,7 @@ void QesData::_listAdd(const wchar_t *p)
 						wcsncpy(a,a_begin,a_len);
 						a[a_len]=L'\0';
 						//
-						list[nlist-1].put_a(a);
+						qa.put_a(a);
 						//問題文への空白とｶｯｺ挿入
 						for(int s=0;s<4;s++)*q++=L' ';
 						*q++=*p;
@@ -134,10 +137,10 @@ void QesData::_listAdd(const wchar_t *p)
 				p++;
 			}
 			*q=L'\0';
-			list[nlist-1].put_q(_q);
+			qa.put_q(_q);
 		}
 	}else{
-		list[nlist-1].put_a(p);
+		list.back().put_a(p);
 		ans_flag=0;
 	}
 }
@@ -219,7 +222,7 @@ token:;
 		}
 		p++;
 	}
-	if(nlist % 2 == 1)_listAdd(L"");
+	// if(list.size() % 2 == 1)_listAdd(L"");
 //	free(this->textbuf); this->textbuf=textbuf;
 	free(textbuf);
 	return true;

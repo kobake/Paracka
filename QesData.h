@@ -1,36 +1,43 @@
 #pragma once
 
+#include <StringLib.h>
 class QesData;
 
+class QandA{
+public:
+private:
+	mystring	m_q;
+	mystring	m_a;
+};
+
 struct QA{
-	wchar_t *q;
-	wchar_t **a;
-	int na;
+	mystring q;
+	myvector<mystring> a;
+	//wchar_t **a;
+	//int na;
 	int kind;
+	QA(){
+		kind = 0;
+	}
 
 	void dispose()
 	{
-		m_free(q);
-		for(int i=0;i<na;i++)free(a[i]);
-		m_free(a);
+		q = L"";
+		a.clear();
 	}
 	void zero()
 	{
-		q=NULL;
-		a=NULL;
-		na=0;
+		q = L"";
+		a.clear();
 		kind=0;
 	}
 	void put_q(const wchar_t *_q)
 	{
-		if(q!=NULL)free(q);
-		q=wcsdup(_q);
+		q = _q;
 	}
 	void put_a(const wchar_t *_a)
 	{
-		na++;
-		a=(wchar_t**)realloc(a,sizeof(wchar_t*)*na);
-		a[na-1]=wcsdup(_a);
+		a.push_back(_a);
 	}
 	void set_kind(int k)
 	{
@@ -45,9 +52,9 @@ public:
 	virtual ~QesData();
 	//問題と解答
 	int getAllNum();
-	const wchar_t *getQes(int index);
-	const wchar_t *getAns(int q_index,int a_index);
-	int getAnsNum(int q_index){ return list[q_index].na; }
+	mystring getQes(int index);
+	mystring getAns(int q_index,int a_index);
+	int getAnsNum(int q_index){ return (int)list[q_index].a.size(); }
 	int getQesKind(int q_index){ return list[q_index].kind; }
 	void turn();
 	//ポインタリスト
@@ -58,8 +65,7 @@ public:
 	bool loadFile(const wchar_t* fpath);
 	void dispose();
 private:
-	QA *list;
-	int nlist;
+	myvector<QA> list;
 	int ans_flag;
 	//反転フラグ
 	int turned;

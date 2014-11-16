@@ -170,7 +170,7 @@ LRESULT MainWindow::onNotify(UINT msg,WPARAM wParam,LPARAM lParam)
 			}else if(rndtable.getSize()>0){
 				//解答チェック
 				wchar_t *p=edtAns[i]->getTextTemp();
-				if(wcscmp(p,qes.getAns(qindex,i))==0){
+				if(wcscmp(p, qes.getAns(qindex,i).c_str())==0){
 					sndOk->play();
 					showGood(i);
 				}else{
@@ -302,7 +302,7 @@ LRESULT MainWindow::onCommand(UINT msg,WPARAM wParam,LPARAM lParam)
 					if(rndtable.getSize()>0){
 						//解答チェック
 						wchar_t *p=edtAns[i]->getTextTemp();
-						if(wcscmp(p,qes.getAns(qindex,i))==0){
+						if(wcscmp(p, qes.getAns(qindex,i).c_str())==0){
 							sndOk->play();
 							showGood(i);
 							if(!mark_is_all_good()){
@@ -383,7 +383,7 @@ void MainWindow::showGood(int a_index)
 {
 	if(qes.getQesKind(qindex)==0){
 		qstep=2;
-		edtQes->setTextF(L"%ls\r\n\r\n ++ ++ Good !! ++ ++",qes.getQes(qindex));
+		edtQes->setTextF(L"%ls\r\n\r\n ++ ++ Good !! ++ ++", qes.getQes(qindex).c_str());
 	}else{
 		mark[a_index]=1;
 		if(mark_is_all_good()){
@@ -398,7 +398,7 @@ void MainWindow::showBad()
 {
 	qstep=3;
 	if(qes.getQesKind(qindex)==0){
-		edtQes->setTextF(L"%ls\r\n\r\n ++ ++ Bad ... ++ ++",qes.getQes(qindex));
+		edtQes->setTextF(L"%ls\r\n\r\n ++ ++ Bad ... ++ ++",qes.getQes(qindex).c_str());
 	}else{
 		edtQes->setTextF(L"%ls\r\n\r\n ++ ++ Bad ... ++ ++",getMarkString());
 	}
@@ -408,7 +408,7 @@ void MainWindow::showBad()
 const wchar_t *MainWindow::getMarkString()
 {
 	static wchar_t tmp[1024];
-	wcscpy(tmp,qes.getQes(qindex));
+	wcscpy(tmp,qes.getQes(qindex).c_str());
 	for(int i=0;i<qes.getAnsNum(qindex);i++){
 		if(mark[i]==-1){
 			wcsreplace_once(tmp,L"(    )",tmp_swprintf(L"( %s )",qes.getAns(qindex,i)));
@@ -443,7 +443,7 @@ void MainWindow::showAns(int a_index)
 {
 	qstep=1;
 	if(qes.getQesKind(qindex)==0){
-		edtQes->setTextF(L"%s\r\n\r\n%s",qes.getQes(qindex),qes.getAns(qindex,0));
+		edtQes->setTextF(L"%ls\r\n\r\n%ls", qes.getQes(qindex).c_str(),qes.getAns(qindex,0).c_str());
 	}else{
 		mark[a_index]=-1;
 		//
@@ -530,7 +530,7 @@ void MainWindow::updateCaption()
 		int n;
 		n=0;
 	}
-	setTextF(L"%s (残り %02d/%02d) - Paracka",
+	setTextF(L"%ls (残り %02d/%02d) - Paracka",
 		app->fs->GetPath().GetTitle(),
 		rndtable.getSize(),
 		qes.getAllNum()
