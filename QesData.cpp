@@ -154,29 +154,36 @@ bool QesData::read(FileStream *in)
 	_listDeleteAll();
 	//全テキスト読み込み → textbuf
 	long nbuf=in->getLength();
-	char *textbuf=(char*)malloc(nbuf+1);
-	nbuf=in->read(textbuf,nbuf);
+	std::vector<char> textbuf(nbuf+1);
+	nbuf=in->read(&textbuf[0],nbuf);
 	textbuf[nbuf]='\0';
+
+	// エンコーディング変換: UTF-8 char[] -> wchar_t[]
+	int wbuflen = ::MultiByteToWideChar(CP_UTF8, 0, &textbuf[0], nbuf, NULL, 0);
+	std::vector<wchar_t> wbuf(wbuflen + 1);
+	wbuflen = ::MultiByteToWideChar(CP_UTF8, 0, &textbuf[0], nbuf, &wbuf[0], wbuflen);
+	wbuf[wbuflen] = 0;
+	
 	//ポインタリストの作成
-	char *p=textbuf;
-	char *begin=p;
+	wchar_t *p=&wbuf[0];
+	wchar_t *begin=p;
 	int is_text=0;
 	int is_comment=0;
 	while(*p!='\0'){
 		if(is_comment==0){
 			//コメント検出 (//または#)
-			if(*p=='/'){
-				if(*(p+1)=='/'){
+			if(*p==L'/'){
+				if(*(p+1)==L'/'){
 					is_comment=1;
 					is_text=0;
 					continue;
-				}else if(*(p+1)=='*'){
+				}else if(*(p+1)==L'*'){
 					is_comment=2;
 					is_text=0;
 					continue;
 				}
 			}
-			else if(*p == '#'){
+			else if(*p == L'#'){
 				is_comment = 1;
 				is_text = 0;
 				continue;
@@ -184,19 +191,19 @@ bool QesData::read(FileStream *in)
 			//トークン検出
 			if(*p==L'\\'){
 				//改行変換
-				if(*(p+1)=='\n'){		//行末に \ があった場合、改行
-					*p++='\r';
-					*p='\n';
+				if(*(p+1)==L'\n'){		//行末に \ があった場合、改行
+					*p++=L'\r';
+					*p=L'\n';
 				}else if(*(p+1)=='n'){	//トークン内に \n があった場合、改行
-					*p++='\r';
-					*p='\n';
+					*p++=L'\r';
+					*p=L'\n';
 				}else{
 					goto token;
 				}
-			}else if(*p=='\t' || *p=='\n'){
-				*p='\0';
+			}else if(*p==L'\t' || *p==L'\n'){
+				*p=L'\0';
 				if(is_text==1){
-					_listAdd(tmp_mbstowcs(begin));
+					_listAdd(begin);
 					is_text=0;
 				}
 			}else{
@@ -208,23 +215,20 @@ token:;
 			}
 		}else if(is_comment==1){
 			//コメントスキップ
-			if(*p=='\n'){
+			if(*p==L'\n'){
 				is_comment=0;
 			}
-			*p='\0';
+			*p=L'\0';
 		}else if(is_comment==2){
 			//コメントスキップ
-			if(*p=='*' && *(p+1)=='/'){
-				*(p+1)='\0';
+			if(*p==L'*' && *(p+1)==L'/'){
+				*(p+1)=L'\0';
 				is_comment=0;
 			}
-			*p='\0';
+			*p=L'\0';
 		}
 		p++;
 	}
-	// if(list.size() % 2 == 1)_listAdd(L"");
-//	free(this->textbuf); this->textbuf=textbuf;
-	free(textbuf);
 	return true;
 }
 
