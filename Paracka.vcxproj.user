@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LocalDebuggerCommandArguments>C:\paracka\簿記\03_ホームポジション選択式.txt</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>C:\Users\kobake\Desktop\paracka\高校英文法をひとつひとつわかりやすく\01-05.txt</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
 </Project>
