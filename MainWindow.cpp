@@ -20,25 +20,25 @@ MainWindow::MainWindow(const wstring& caption,int x,int y,int w,int h,Window *_p
 	Window::setFontOnCreate(font);
 	//ﾒﾆｭｰ
 	MENUDEF menudef[]={
-		L"ファイル(&F)",			-1,					KMENU_POPUP,
-			L"開く(&O)\tCtrl+O",	IDM_FILE_OPEN,		0,
-			L"再読み込み(&R)",		IDM_FILE_RELOAD,	0,
-			L"-",					-1,					0,
-			L"終了(&X)\tAlt+F4",	IDM_FILE_QUIT,		KMENU_POPEND,
-		L"機能(&F)",				-1,					KMENU_POPUP,
-			L"初めから(&S)",		IDM_FUNC_START,		0,
-			L"-",					-1,					0,
-			L"添削(&R)",			IDM_FUNC_ENTER,		0,
-			L"ﾊﾟｽ(&P)",				IDM_FUNC_PASS,		0,
-			L"解答を見る(&L)",		IDM_FUNC_VIEW,		0,
-			L"-",					-1,					0,
-			L"問題と解答の反転(&T)",IDM_FUNC_TURN,		KMENU_POPEND,
-		L"ﾍﾙﾌﾟ(&H)",				-1,					KMENU_POPUP,
-			L"ﾄﾋﾟｯｸの検索(&H)\tF1",	IDM_HELP_TOPIC,		0,
-			L"-",					-1,					0,
-			L"ﾊﾞｰｼﾞｮﾝ情報(&A)",		IDM_HELP_VER,		KMENU_POPEND,
+		L"ファイル(&F)",				-1,					KMENU_POPUP,
+			L"開く(&O)\tCtrl+O",		IDM_FILE_OPEN,		0,
+			L"再読み込み(&R)\tCtrl+R",	IDM_FILE_RELOAD,	0,
+			L"-",						-1,					0,
+			L"終了(&X)\tAlt+F4",		IDM_FILE_QUIT,		KMENU_POPEND,
+		L"機能(&F)",					-1,					KMENU_POPUP,
+			L"初めから(&S)",			IDM_FUNC_START,		0,
+			L"-",						-1,					0,
+			L"添削(&R)",				IDM_FUNC_ENTER,		0,
+			L"ﾊﾟｽ(&P)",					IDM_FUNC_PASS,		0,
+			L"解答を見る(&L)",			IDM_FUNC_VIEW,		0,
+			L"-",						-1,					0,
+			L"問題と解答の反転(&T)",	IDM_FUNC_TURN,		KMENU_POPEND,
+		L"ﾍﾙﾌﾟ(&H)",					-1,					KMENU_POPUP,
+			L"ﾄﾋﾟｯｸの検索(&H)\tF1",		IDM_HELP_TOPIC,		0,
+			L"-",						-1,					0,
+			L"ﾊﾞｰｼﾞｮﾝ情報(&A)",			IDM_HELP_VER,		KMENU_POPEND,
 		//
-		NULL,						-1,					KMENU_END
+		NULL,							-1,					KMENU_END
 	};
 	mnuMain=CreateDefMenu(menudef,false);
 	mnuMain->adjustTo(this);
@@ -61,7 +61,9 @@ MainWindow::MainWindow(const wstring& caption,int x,int y,int w,int h,Window *_p
 	showNone();
 	//
 	if(wcscmp(app->fs->GetPath().GetTitle(),L"...")!=0){
-		fileLoad(app->fs->GetPath().GetFullPath());
+		std::vector<std::wstring> paths;
+		paths.push_back(app->fs->GetPath().GetFullPath());
+		fileLoad(paths);
 	}
 	dragAcceptFiles(true);
 }
@@ -184,41 +186,16 @@ LRESULT MainWindow::onNotify(UINT msg,WPARAM wParam,LPARAM lParam)
 	return CustomWindow::onNotify(msg,wParam,lParam);
 }
 
-void MainWindow::fileReload(const wstring& fpath)
+void MainWindow::fileReload()
 {
-	bool ret=qes.loadFile(fpath.c_str());
-	if(ret){
-		//乱数ﾘｽﾄの更新
-		if(rndtable.getSize()>qes.getAllNum()){
-			int from=qes.getAllNum();
-			int to=rndtable.getSize()-1;
-			for(int i=from;i<=to;i++)
-				rndtable.clear(i);
-		}
-		//
-		if(rndtable.getSize()>0){
-			if(!rndtable.exists(qindex)){
-				qindex=rndtable.getNext();
-			}
-			showQes();
-		}else{
-			showNone();
-		}
-	}else{
-		rndtable.clearAll();
-		messageBox(L"読み込みに失敗しました",L"エラー");
-		qes.dispose();
-		qindex=0;
-		showNone();
-		setText(L"Paracka");
-	}
-	updateCaption();
+	fileLoad(m_paths);
 }
 
-void MainWindow::fileLoad(const wstring& fpath)
+void MainWindow::fileLoad(const std::vector<std::wstring>& paths)
 {
-	bool ret=qes.loadFile(fpath.c_str());
+	bool ret=qes.loadFile(paths);
 	if(ret){
+		m_paths = paths;
 		//乱数ﾘｽﾄの作成
 		rndtable.create(qes.getAllNum());
 		//
@@ -244,8 +221,16 @@ LRESULT MainWindow::onDropFiles(UINT msg,WPARAM wParam,LPARAM lParam)
 {
 	CDropFiles drop((HDROP)wParam);
 	if(drop.size()>0){
+		// パス設定 //
 		app->fs->GetPath().SetFullPath(drop.GetPath(0));
-		fileLoad(app->fs->GetPath().GetFullPath());
+		// パスリスト構築 //
+		std::vector<std::wstring> paths;
+		for(int i = 0; i < (int)drop.size(); i++){
+			paths.push_back(drop.GetPath(i));
+		}
+		// ロード //
+		//fileLoad(app->fs->GetPath().GetFullPath());
+		fileLoad(paths);
 	}
 	drop.finish();
 	return 0L;
@@ -259,11 +244,13 @@ LRESULT MainWindow::onCommand(UINT msg,WPARAM wParam,LPARAM lParam)
 	if(cmd_notify==0 || cmd_notify==1)switch(cmd_id){
 	case IDM_FILE_OPEN:
 		if(app->fs->showOpen(L"開く",this->getHWND())){
-			fileLoad(app->fs->GetPath().GetFullPath());
+			std::vector<std::wstring> paths;
+			paths.push_back(app->fs->GetPath().GetFullPath());
+			fileLoad(paths);
 		}
 		break;
 	case IDM_FILE_RELOAD:
-		fileReload(app->fs->GetPath().GetFullPath());
+		fileReload();
 		break;
 	case IDM_FILE_QUIT:
 		close();
@@ -526,12 +513,22 @@ void MainWindow::showNone()
 
 void MainWindow::updateCaption()
 {
-	if(qes.getAllNum()){
-		int n;
-		n=0;
+	// 名前の決定
+	std::wstring name = L"";
+	if(m_paths.size() == 0){
+		name = L"無題";
 	}
+	else if(m_paths.size() == 1){
+		CFilePath pathinfo = m_paths[0];
+		name = pathinfo.GetTitle();
+	}
+	else{
+		name = L"複数のファイル";
+	}
+
+	// キャプション設定
 	setTextF(L"%ls (残り %02d/%02d) - Paracka",
-		app->fs->GetPath().GetTitle(),
+		name.c_str(),
 		rndtable.getSize(),
 		qes.getAllNum()
 	);

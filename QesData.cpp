@@ -149,9 +149,9 @@ void QesData::_listAdd(const wchar_t *p)
 // ファイル入出力 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-bool QesData::read(FileStream *in)
+bool QesData::_read(FileStream *in)
 {
-	_listDeleteAll();
+	// _listDeleteAll();
 	//全テキスト読み込み → textbuf
 	long nbuf=in->getLength();
 	std::vector<char> textbuf(nbuf+1);
@@ -232,16 +232,16 @@ token:;
 	return true;
 }
 
-bool QesData::loadFile(const wchar_t* fpath)
+bool QesData::loadFile(const std::vector<std::wstring>& paths)
 {
 	_listDeleteAll();
-	FileStream in;
-	if(in.open(fpath,L"rt")){
-		bool ret=read(&in);
+	for(int i = 0; i < (int)paths.size(); i++){
+		FileStream in;
+		if(!in.open(paths[i].c_str(), L"rt"))return false;
+		bool ret = _read(&in);
 		in.close();
-		return ret;
-	}else{
-		return false;
+		if(!ret)return false;
 	}
+	return true;
 }
 

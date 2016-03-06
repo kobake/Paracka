@@ -22,6 +22,7 @@ int AppInit(int argc,const wchar_t* argv[],int nCmdShow)
 
 ACCELDEF accdef[]={
 	IDM_FILE_OPEN,		'O',	ACCELF_CONTROL,
+	IDM_FILE_RELOAD,	'R',	ACCELF_CONTROL,
 	-1,					-1,		0,
 };
 

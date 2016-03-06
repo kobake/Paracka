@@ -10,25 +10,6 @@ class MainWindow;
 class WaveSound;
 
 class MainWindow : public CustomWindow{
-protected:
-	//ﾒﾆｭｰ
-	Menu *mnuMain;
-	//ｺﾝﾄﾛｰﾙ
-	EditBox *edtQes;
-	EditField **edtAns; int n_edtAns;
-//	Button *btnEnter;
-	Button *btnPass;
-	Button *btnView;
-	//ｻｳﾝﾄﾞ
-	WaveSound *sndOk;
-	WaveSound *sndNg;
-	WaveSound *sndClear;
-	//
-	QesData qes;
-	RndTable rndtable;
-	int qnum;
-	int qindex;
-	int qstep;
 public:
 	void initAnsEdit()
 	{
@@ -62,23 +43,6 @@ public:
 		n_edtAns=n_new;
 		//更新
 		postSize();
-/*
-
-		//
-
-		destroyAnsEdit();
-		//
-		n_edtAns=n;
-		//
-		if(n_edtAns>0){
-			edtAns=(EditField**)malloc(sizeof(EditField*)*n_edtAns);
-			for(int i=0;i<n_edtAns;i++){
-				edtAns[i]=new EditField(0,0,0,0,this);
-			}
-		}
-		//
-		postSize();
-		*/
 	}
 public:
 	MainWindow(const wstring& caption,int x,int y,int w,int h,Window *_parent);
@@ -105,10 +69,33 @@ public:
 	void showNone();
 	//
 	void updateCaption();
-	void fileLoad(const wstring& fpath);
-	void fileReload(const wstring& fpath);
+	void fileLoad(const std::vector<std::wstring>& paths);
+	void fileReload();
 	//
 	const wchar_t *MainWindow::getMarkString();
+private:
+	//ﾒﾆｭｰ
+	Menu *mnuMain;
+
+	//ｺﾝﾄﾛｰﾙ
+	EditBox *edtQes;
+	EditField **edtAns; int n_edtAns;
+//	Button *btnEnter;
+	Button *btnPass;
+	Button *btnView;
+
+	//ｻｳﾝﾄﾞ
+	WaveSound *sndOk;
+	WaveSound *sndNg;
+	WaveSound *sndClear;
+
+	//データ
+	std::vector<std::wstring> m_paths;
+	QesData qes;
+	RndTable rndtable;
+	int qnum;
+	int qindex;
+	int qstep;
 };
 
 #include "c_WaveSound.h"

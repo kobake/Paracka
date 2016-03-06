@@ -61,9 +61,10 @@ public:
 	void _listDeleteAll();        //ポインタリストすべて削除
 	void _listAdd(const wchar_t *p); //ポインタリストの追加
 	//ファイル
-	bool read(FileStream *in);
-	bool loadFile(const wchar_t* fpath);
+	bool loadFile(const std::vector<std::wstring>& paths);
 	void dispose();
+private:
+	bool _read(FileStream *in);
 private:
 	myvector<QA> list;
 	int ans_flag;
