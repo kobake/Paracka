@@ -157,10 +157,6 @@ LRESULT MainWindow::onNotify(UINT msg,WPARAM wParam,LPARAM lParam)
 			//sendMenuClick(IDM_FUNC_ENTER);
 			if(isGood()){
 				//次の問題へ
-				if(rndtable.getSize()==1){
-					int n;
-					n=0;
-				}
 				rndtable.clear(qindex);
 				updateCaption();
 				if(rndtable.getSize()>0){
@@ -423,6 +419,8 @@ void MainWindow::showQes(bool reset_ans)
 	nmark=qes.getAnsNum(qindex);
 	mark=(int*)realloc(mark,sizeof(int)*nmark);
 	memset(mark,0,sizeof(int)*nmark);
+
+	updateCaption();
 }
 
 
@@ -523,7 +521,10 @@ void MainWindow::updateCaption()
 		name = pathinfo.GetTitle();
 	}
 	else{
-		name = L"複数のファイル";
+		name = L"複数";
+		if(qindex >= 0 && qindex < qes.getAllNum()){
+			name += L" (" + qes.getFileName(qindex) + L")";
+		}
 	}
 
 	// キャプション設定

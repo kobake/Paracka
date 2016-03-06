@@ -3,20 +3,14 @@
 #include <StringLib.h>
 class QesData;
 
-class QandA{
-public:
-private:
-	mystring	m_q;
-	mystring	m_a;
-};
-
 struct QA{
 	mystring q;
+	mystring filepath;
 	myvector<mystring> a;
-	//wchar_t **a;
-	//int na;
 	int kind;
-	QA(){
+
+	QA()
+	{
 		kind = 0;
 	}
 
@@ -31,9 +25,10 @@ struct QA{
 		a.clear();
 		kind=0;
 	}
-	void put_q(const wchar_t *_q)
+	void put_q(const wchar_t *_q, const mystring& _filepath)
 	{
 		q = _q;
+		filepath = _filepath;
 	}
 	void put_a(const wchar_t *_a)
 	{
@@ -53,18 +48,19 @@ public:
 	//問題と解答
 	int getAllNum();
 	mystring getQes(int index);
+	mystring getFileName(int index);
 	mystring getAns(int q_index,int a_index);
 	int getAnsNum(int q_index){ return (int)list[q_index].a.size(); }
 	int getQesKind(int q_index){ return list[q_index].kind; }
 	void turn();
 	//ポインタリスト
 	void _listDeleteAll();        //ポインタリストすべて削除
-	void _listAdd(const wchar_t *p); //ポインタリストの追加
+	void _listAdd(const wchar_t *p, const mystring& filepath); //ポインタリストの追加
 	//ファイル
 	bool loadFile(const std::vector<std::wstring>& paths);
 	void dispose();
 private:
-	bool _read(FileStream *in);
+	bool _read(FileStream *in, const mystring& filepath);
 private:
 	myvector<QA> list;
 	int ans_flag;

@@ -51,6 +51,14 @@ mystring QesData::getQes(int index)
 		return NULL;
 	}
 }
+mystring QesData::getFileName(int index)
+{
+	if(index>=0 && index<getAllNum()){
+		return CFilePath(list[index].filepath).GetTitle();
+	}else{
+		return L"?";
+	}
+}
 
 mystring QesData::getAns(int q_index,int a_index)
 {
@@ -81,16 +89,9 @@ void QesData::_listDeleteAll()
 	dispose();
 }
 
-void QesData::_listAdd(const wchar_t *p)
+void QesData::_listAdd(const wchar_t *p, const mystring& filepath)
 {
 	if(ans_flag==0){
-		/*
-		nlist++;
-		if(nlist % 256==1){
-			list=(QA*)realloc(list,sizeof(QA)*(nlist+255));
-		}
-		list[nlist-1].zero();
-		*/
 		list.push_back(QA());
 		QA& qa = list.back();
 
@@ -98,7 +99,7 @@ void QesData::_listAdd(const wchar_t *p)
 		if(p[0]!='@'){
 			//単語モード
 			qa.set_kind(0);
-			qa.put_q(p);
+			qa.put_q(p, filepath);
 			ans_flag=1;
 		}else{
 			//穴埋めモード
@@ -137,7 +138,7 @@ void QesData::_listAdd(const wchar_t *p)
 				p++;
 			}
 			*q=L'\0';
-			qa.put_q(_q);
+			qa.put_q(_q, filepath);
 		}
 	}else{
 		list.back().put_a(p);
@@ -149,7 +150,7 @@ void QesData::_listAdd(const wchar_t *p)
 // ファイル入出力 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-bool QesData::_read(FileStream *in)
+bool QesData::_read(FileStream *in, const mystring& filepath)
 {
 	// _listDeleteAll();
 	//全テキスト読み込み → textbuf
@@ -203,7 +204,7 @@ bool QesData::_read(FileStream *in)
 			}else if(*p==L'\t' || *p==L'\n'){
 				*p=L'\0';
 				if(is_text==1){
-					_listAdd(begin);
+					_listAdd(begin, filepath);
 					is_text=0;
 				}
 			}else{
@@ -238,7 +239,7 @@ bool QesData::loadFile(const std::vector<std::wstring>& paths)
 	for(int i = 0; i < (int)paths.size(); i++){
 		FileStream in;
 		if(!in.open(paths[i].c_str(), L"rt"))return false;
-		bool ret = _read(&in);
+		bool ret = _read(&in, paths[i]);
 		in.close();
 		if(!ret)return false;
 	}
