@@ -90,8 +90,8 @@ private:
 	WaveSound *sndClear;
 
 	//ÉfÅ[É^
-	std::vector<std::wstring> m_paths;
-	RecordList qes;
+	std::vector<std::wstring>	m_paths;
+	RecordList					m_recordList;
 	RndTable rndtable;
 	int qnum;
 	int qindex;

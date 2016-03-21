@@ -11,7 +11,7 @@ Font font(L"ＭＳ ゴシック",9);
 
 MainWindow::MainWindow(const wstring& caption,int x,int y,int w,int h,Window *_parent)
 : CustomWindow(caption,x,y,w,h,_parent)
-, qes()
+, m_recordList()
 {
 	initAnsEdit();
 	qnum=0;
@@ -168,7 +168,7 @@ LRESULT MainWindow::onNotify(UINT msg,WPARAM wParam,LPARAM lParam)
 			}else if(rndtable.getSize()>0){
 				//解答チェック
 				wchar_t *p=edtAns[i]->getTextTemp();
-				if(wcscmp(p, qes.getAns(qindex,i).c_str())==0){
+				if(wcscmp(p, m_recordList.getAns(qindex,i).c_str())==0){
 					sndOk->play();
 					showGood(i);
 				}else{
@@ -189,11 +189,11 @@ void MainWindow::fileReload()
 
 void MainWindow::fileLoad(const std::vector<std::wstring>& paths)
 {
-	bool ret=qes.loadFile(paths);
+	bool ret=m_recordList.loadFile(paths);
 	if(ret){
 		m_paths = paths;
 		//乱数ﾘｽﾄの作成
-		rndtable.create(qes.getAllNum());
+		rndtable.create(m_recordList.getAllNum());
 		//
 		if(rndtable.getSize()>0){
 			qindex=rndtable.getNext();
@@ -204,7 +204,7 @@ void MainWindow::fileLoad(const std::vector<std::wstring>& paths)
 	}else{
 		rndtable.clearAll();
 		messageBox(L"読み込みに失敗しました",L"エラー");
-		qes.dispose();
+		m_recordList.dispose();
 		qindex=0;
 		showNone();
 		setText(L"Paracka");
@@ -253,7 +253,7 @@ LRESULT MainWindow::onCommand(UINT msg,WPARAM wParam,LPARAM lParam)
 		break;
 	case IDM_FUNC_START:
 		//乱数ﾘｽﾄの作成
-		rndtable.create(qes.getAllNum());
+		rndtable.create(m_recordList.getAllNum());
 		//
 		if(rndtable.getSize()>0){
 			qindex=rndtable.getNext();
@@ -285,7 +285,7 @@ LRESULT MainWindow::onCommand(UINT msg,WPARAM wParam,LPARAM lParam)
 					if(rndtable.getSize()>0){
 						//解答チェック
 						wchar_t *p=edtAns[i]->getTextTemp();
-						if(wcscmp(p, qes.getAns(qindex,i).c_str())==0){
+						if(wcscmp(p, m_recordList.getAns(qindex,i).c_str())==0){
 							sndOk->play();
 							showGood(i);
 							if(!mark_is_all_good()){
@@ -364,9 +364,9 @@ bool mark_is_all_good()
 
 void MainWindow::showGood(int a_index)
 {
-	if(qes.getQesKind(qindex)==0){
+	if(m_recordList.getQesKind(qindex)==0){
 		qstep=2;
-		edtQes->setTextF(L"%ls\r\n\r\n ++ ++ Good !! ++ ++", qes.getQes(qindex).c_str());
+		edtQes->setTextF(L"%ls\r\n\r\n ++ ++ Good !! ++ ++", m_recordList.getQes(qindex).c_str());
 	}else{
 		mark[a_index]=1;
 		if(mark_is_all_good()){
@@ -380,8 +380,8 @@ void MainWindow::showGood(int a_index)
 void MainWindow::showBad()
 {
 	qstep=3;
-	if(qes.getQesKind(qindex)==0){
-		edtQes->setTextF(L"%ls\r\n\r\n ++ ++ Bad ... ++ ++",qes.getQes(qindex).c_str());
+	if(m_recordList.getQesKind(qindex)==0){
+		edtQes->setTextF(L"%ls\r\n\r\n ++ ++ Bad ... ++ ++",m_recordList.getQes(qindex).c_str());
 	}else{
 		edtQes->setTextF(L"%ls\r\n\r\n ++ ++ Bad ... ++ ++",getMarkString());
 	}
@@ -391,12 +391,12 @@ void MainWindow::showBad()
 const wchar_t *MainWindow::getMarkString()
 {
 	static wchar_t tmp[1024];
-	wcscpy(tmp,qes.getQes(qindex).c_str());
-	for(int i=0;i<qes.getAnsNum(qindex);i++){
+	wcscpy(tmp,m_recordList.getQes(qindex).c_str());
+	for(int i=0;i<m_recordList.getAnsNum(qindex);i++){
 		if(mark[i]==-1){
-			wcsreplace_once(tmp,L"(    )",tmp_swprintf(L"( %s )",qes.getAns(qindex,i)));
+			wcsreplace_once(tmp,L"(    )",tmp_swprintf(L"( %s )",m_recordList.getAns(qindex,i)));
 		}else if(mark[i]==1){
-			wcsreplace_once(tmp,L"(    )",tmp_swprintf(L"( %s！ )",qes.getAns(qindex,i)));
+			wcsreplace_once(tmp,L"(    )",tmp_swprintf(L"( %s！ )",m_recordList.getAns(qindex,i)));
 		}else{
 			wcsreplace_once(tmp,L"(    )",L"()");
 		}
@@ -408,15 +408,15 @@ const wchar_t *MainWindow::getMarkString()
 void MainWindow::showQes(bool reset_ans)
 {
 	qstep=0;
-	edtQes->setText(qes.getQes(qindex));
+	edtQes->setText(m_recordList.getQes(qindex));
 	//
-	createAnsEdit(qes.getAnsNum(qindex));
+	createAnsEdit(m_recordList.getAnsNum(qindex));
 	if(reset_ans){ for(int i=0;i<n_edtAns;i++)edtAns[i]->setText(L""); }
 //	btnEnter->setText(L"添削(Enter)");	mnuMain->setItemTextByID(IDM_FUNC_ENTER,L"添削(&R)");
 //	btnView->setText(L"答えを見る(&L)");	mnuMain->setItemTextByID(IDM_FUNC_VIEW,L"答えを見る(&L)");
 	setButtonEnabled(true);
 	edtAns[0]->setFocus();
-	nmark=qes.getAnsNum(qindex);
+	nmark=m_recordList.getAnsNum(qindex);
 	mark=(int*)realloc(mark,sizeof(int)*nmark);
 	memset(mark,0,sizeof(int)*nmark);
 
@@ -427,8 +427,8 @@ void MainWindow::showQes(bool reset_ans)
 void MainWindow::showAns(int a_index)
 {
 	qstep=1;
-	if(qes.getQesKind(qindex)==0){
-		edtQes->setTextF(L"%ls\r\n\r\n%ls", qes.getQes(qindex).c_str(),qes.getAns(qindex,0).c_str());
+	if(m_recordList.getQesKind(qindex)==0){
+		edtQes->setTextF(L"%ls\r\n\r\n%ls", m_recordList.getQes(qindex).c_str(),m_recordList.getAns(qindex,0).c_str());
 	}else{
 		mark[a_index]=-1;
 		//
@@ -451,7 +451,7 @@ void MainWindow::showCongratulation()
 
 void MainWindow::hideAns(int a_index)
 {
-	if(qes.getQesKind(qindex)==0){
+	if(m_recordList.getQesKind(qindex)==0){
 		showQes(false);
 	}else{
 		mark[a_index]=0;
@@ -463,14 +463,14 @@ void MainWindow::hideAns(int a_index)
 void MainWindow::turnQesAns()
 {
 	//#####
-	qes.turn();
+	m_recordList.turn();
 	if(qstep==0 || qstep==3){
 		showQes();
 	}else if(qstep==1){
 		showAns(0); //####引数0は仮
 	}else if(qstep==2){
 		showGood(0); //####引数0は仮
-		edtAns[0]->setText(qes.getAns(qindex,0)); //####引数0は仮
+		edtAns[0]->setText(m_recordList.getAns(qindex,0)); //####引数0は仮
 	}else if(qstep==4){
 		showCongratulation();
 	}else if(qstep==-1){
@@ -485,7 +485,7 @@ bool MainWindow::isGood()
 
 bool MainWindow::visibleAns(int a_index)
 {
-	if(qes.getQesKind(qindex)==0){
+	if(m_recordList.getQesKind(qindex)==0){
 		return qstep==1;
 	}else{
 		return mark[a_index]!=0;
@@ -522,8 +522,8 @@ void MainWindow::updateCaption()
 	}
 	else{
 		name = L"複数";
-		if(qindex >= 0 && qindex < qes.getAllNum()){
-			name += L" (" + qes.getFileName(qindex) + L")";
+		if(qindex >= 0 && qindex < m_recordList.getAllNum()){
+			name += L" (" + m_recordList.getFileName(qindex) + L")";
 		}
 	}
 
@@ -531,6 +531,6 @@ void MainWindow::updateCaption()
 	setTextF(L"%ls (残り %02d/%02d) - Paracka",
 		name.c_str(),
 		rndtable.getSize(),
-		qes.getAllNum()
+		m_recordList.getAllNum()
 	);
 }
