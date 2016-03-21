@@ -10,17 +10,21 @@ public:
 	RecordList();
 	virtual ~RecordList();
 	//問題と解答
-	int getAllNum();
-	Record& getRecord(int index)
+	int getNormalCount();
+	Record& getNormalAt(int index)
 	{
-		return *m_list[index];
+		int normalIndex = 0;
+		for(int i = 0; i < (int)m_list.size(); i++){
+			if(m_list[i]->isNormal()){
+				if(normalIndex == index){
+					return *m_list[i];
+				}
+				normalIndex++;
+			}
+		}
+		throw std::exception("getNormalAt: record not found");
 	}
 
-	mystring getQes(int index);
-	mystring getFileName(int index);
-	mystring getAns(int q_index,int a_index);
-	int getAnsNum(int q_index){ return (int)m_list[q_index]->a.size(); }
-	
 	void turn();
 	//ポインタリスト
 	void _listDeleteAll();        //ポインタリストすべて削除

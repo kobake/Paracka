@@ -7,43 +7,35 @@ struct Record{
 public:
 	mystring			filepath;
 	mystring			q;
-	myvector<mystring>	a;
-	int					kind;
+	mystring			a;
 
 public:
 	Record()
 	{
-		kind = 0;
 	}
-	void put_q(const wchar_t *_q, const mystring& _filepath)
+	virtual ~Record()
 	{
-		q = _q;
-		filepath = _filepath;
 	}
-	void put_a(const wchar_t *_a)
-	{
-		a.push_back(_a);
-	}
-	void set_kind(int k)
-	{
-		kind=k;
-	}
+	virtual bool isNormal() const	{ return false; }
+	
+	mystring getFileName() const;
 };
 
 class NormalRecord : public Record{
 public:
 	NormalRecord(const mystring& q, const mystring& filepath)
 	{
-		this->put_q(q.c_str(), filepath);
-		this->set_kind(0);
+		this->q = q;
+		this->filepath = filepath;
 	}
+	virtual bool isNormal() const	{ return true; }
 };
 
-class AnaumeRecord : public Record{
+class CommentRecord : public Record{
 public:
-	AnaumeRecord()
+	CommentRecord(const mystring& text, const mystring& filepath)
 	{
-		this->set_kind(1);
+		this->q = text;
+		this->filepath = filepath;
 	}
 };
-

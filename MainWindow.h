@@ -26,6 +26,7 @@ public:
 	}
 	void createAnsEdit(int n)
 	{
+		n = 1;
 		//余計な分を消す
 		int n_old=n_edtAns;
 		int n_new=n;
@@ -91,7 +92,9 @@ private:
 
 	//データ
 	std::vector<std::wstring>	m_paths;
-	RecordList					m_recordList;
+
+	RecordList					m_allList; // コメントも含む全レコード
+
 	RndTable rndtable;
 	int qnum;
 	int qindex;

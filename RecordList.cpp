@@ -32,47 +32,13 @@ void RecordList::dispose()
 // 問題と解答 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-int RecordList::getAllNum()
+int RecordList::getNormalCount()
 {
-	if(ans_flag==0){
-		return (int)m_list.size();
-	}else{
-		return (int)m_list.size() - 1;
+	int cnt = 0;
+	for(int i = 0; i < (int)m_list.size(); i++){
+		if(m_list[i]->isNormal())cnt++;
 	}
-}
-
-mystring RecordList::getQes(int index)
-{
-	if(index>=0 && index<getAllNum()){
-		if(turned==0){
-			return m_list[index]->q;
-		}else{
-			return m_list[index]->a[0];
-		}
-	}else{
-		return NULL;
-	}
-}
-mystring RecordList::getFileName(int index)
-{
-	if(index>=0 && index<getAllNum()){
-		return CFilePath(m_list[index]->filepath).GetTitle();
-	}else{
-		return L"?";
-	}
-}
-
-mystring RecordList::getAns(int q_index,int a_index)
-{
-	if(q_index>=0 && q_index<getAllNum()){
-		if(turned==0){
-			return m_list[q_index]->a[a_index];
-		}else{
-			return m_list[q_index]->q;
-		}
-	}else{
-		return NULL;
-	}
+	return cnt;
 }
 
 void RecordList::turn()
@@ -91,59 +57,6 @@ void RecordList::_listDeleteAll()
 	dispose();
 }
 
-void RecordList::_listAdd(const wchar_t *p, const mystring& filepath)
-{
-	if(ans_flag==0){
-		if(p[0]!='@'){
-			//単語モード
-			m_list.push_back(new NormalRecord(p, filepath));
-			ans_flag=1;
-		}else{
-			//穴埋めモード
-			m_list.push_back(new AnaumeRecord());
-			Record& qa = *m_list.back();
-			//
-			p++;
-			//問題 p の中から解答「(x)」を抜き出す
-			wchar_t _q[1024],*q=_q,a[256];
-			const wchar_t *a_begin,*a_end; int a_len;
-			int is_a=0;
-			while(*p!='\0' && (q-_q)<1000){
-				if(!is_a){
-					if(*p==L'('){
-						//解答開始位置
-						is_a=1;
-						a_begin=p+1;
-					}
-					*q++=*p;
-				}else{
-					if(*p==L')'){
-						//解答範囲の決定
-						is_a=0;
-						a_end=p;
-						a_len=a_end-a_begin;
-						if(a_len>255)a_len=255;
-						//解答のコピー
-						wcsncpy(a,a_begin,a_len);
-						a[a_len]=L'\0';
-						//
-						qa.put_a(a);
-						//問題文への空白とｶｯｺ挿入
-						for(int s=0;s<4;s++)*q++=L' ';
-						*q++=*p;
-					}
-				}
-				p++;
-			}
-			*q=L'\0';
-			qa.put_q(_q, filepath);
-		}
-	}
-	else{
-		m_list.back()->put_a(p);
-		ans_flag=0;
-	}
-}
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 // ファイル入出力 
@@ -193,11 +106,21 @@ bool RecordList::_read(FileStream *in, const mystring& filepath)
 		mystring line = lines[i];
 		// コメント検出
 		if(line.startsWith(L"//") || line.startsWith(L"#")){
+			m_list.push_back(new CommentRecord(line, filepath));
 			continue;
 		}
 		// テキスト
 		if(line.length() > 0){
-			_listAdd(line.c_str(), filepath);
+			Record* lastRecord = NULL;
+			if(m_list.size() > 0)lastRecord = m_list.back();
+
+			if(lastRecord && lastRecord->isNormal() && lastRecord->a.length() == 0){
+				lastRecord->a = line;
+			}
+			else{
+				m_list.push_back(new NormalRecord(line, filepath));
+			}
+			continue;
 		}
 	}
 	
