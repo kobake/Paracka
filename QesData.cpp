@@ -92,8 +92,8 @@ void QesData::_listDeleteAll()
 void QesData::_listAdd(const wchar_t *p, const mystring& filepath)
 {
 	if(ans_flag==0){
-		list.push_back(QA());
-		QA& qa = list.back();
+		list.push_back(Record());
+		Record& qa = list.back();
 
 
 		if(p[0]!='@'){

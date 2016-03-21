@@ -1,44 +1,8 @@
 #pragma once
 
 #include <StringLib.h>
-class QesData;
 
-struct QA{
-	mystring q;
-	mystring filepath;
-	myvector<mystring> a;
-	int kind;
-
-	QA()
-	{
-		kind = 0;
-	}
-
-	void dispose()
-	{
-		q = L"";
-		a.clear();
-	}
-	void zero()
-	{
-		q = L"";
-		a.clear();
-		kind=0;
-	}
-	void put_q(const wchar_t *_q, const mystring& _filepath)
-	{
-		q = _q;
-		filepath = _filepath;
-	}
-	void put_a(const wchar_t *_a)
-	{
-		a.push_back(_a);
-	}
-	void set_kind(int k)
-	{
-		kind=k;
-	}
-};
+#include "Record.h"
 
 class QesData{
 public:
@@ -62,7 +26,7 @@ public:
 private:
 	bool _read(FileStream *in, const mystring& filepath);
 private:
-	myvector<QA> list;
+	myvector<Record> list;
 	int ans_flag;
 	//”½“]ƒtƒ‰ƒO
 	int turned;

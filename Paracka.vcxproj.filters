@@ -14,15 +14,15 @@
       <UniqueIdentifier>{5c50b23e-3731-47bf-9b66-2deec9a3d0a7}</UniqueIdentifier>
       <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat;h;hpp;hxx;hm;inl</Extensions>
     </Filter>
+    <Filter Include="Source Files\Data">
+      <UniqueIdentifier>{405bc02a-cb39-4878-8f06-9b839dbb29fb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="id.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="main.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="QesData.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="RndTable.h">
@@ -34,12 +34,15 @@
     <ClInclude Include="MainWindow.h">
       <Filter>Source Files\Window</Filter>
     </ClInclude>
+    <ClInclude Include="QesData.h">
+      <Filter>Source Files\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="Record.h">
+      <Filter>Source Files\Data</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="QesData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="RndTable.cpp">
@@ -50,6 +53,12 @@
     </ClCompile>
     <ClCompile Include="MainWindow.cpp">
       <Filter>Source Files\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="QesData.cpp">
+      <Filter>Source Files\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="Record.cpp">
+      <Filter>Source Files\Data</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
