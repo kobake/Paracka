@@ -25,6 +25,8 @@ MainWindow::MainWindow(const wstring& caption,int x,int y,int w,int h,Window *_p
 			L"-",						-1,					0,
 			L"終了(&X)\tAlt+F4",		IDM_FILE_QUIT,		KMENU_POPEND,
 		L"機能(&F)",					-1,					KMENU_POPUP,
+			L"マーキング(&M)\tCtrl+M",	IDM_FUNC_MARKING,	0,
+			L"-",						-1,					0,
 			L"初めから(&S)",			IDM_FUNC_START,		0,
 			L"-",						-1,					0,
 			L"添削(&R)",				IDM_FUNC_ENTER,		0,
@@ -251,6 +253,10 @@ LRESULT MainWindow::onCommand(UINT msg,WPARAM wParam,LPARAM lParam)
 	case IDM_FILE_QUIT:
 		close();
 		break;
+	case IDM_FUNC_MARKING:
+		m_allList.getNormalAt(qindex).toggleMarking();
+		refreshText();
+		break;
 	case IDM_FUNC_START:
 		//乱数ﾘｽﾄの作成
 		rndtable.create(m_allList.getNormalCount());
@@ -422,11 +428,8 @@ void MainWindow::hideAns(int a_index)
 	}
 }
 
-
-void MainWindow::turnQesAns()
+void MainWindow::refreshText()
 {
-	//#####
-	m_allList.turn();
 	if(qstep==0 || qstep==3){
 		showQes();
 	}else if(qstep==1){
@@ -439,6 +442,13 @@ void MainWindow::turnQesAns()
 	}else if(qstep==-1){
 		;
 	}
+}
+
+void MainWindow::turnQesAns()
+{
+	//#####
+	m_allList.turn();
+	refreshText();
 }
 
 bool MainWindow::isGood()

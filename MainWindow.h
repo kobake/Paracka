@@ -63,6 +63,7 @@ public:
 	void showAns(int a_index);
 	void hideAns(int a_index);
 	void showCongratulation();
+	void refreshText();
 	void turnQesAns();
 	bool isGood();
 	bool visibleAns(int a_index);

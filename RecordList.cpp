@@ -104,6 +104,11 @@ bool RecordList::_read(FileStream *in, const mystring& filepath)
 	// 読み取り
 	for(int i = 0; i < (int)lines.size(); i++){
 		mystring line = lines[i];
+		// 空行
+		if(line.length() == 0){
+			m_list.push_back(new CommentRecord(line, filepath));
+			continue;
+		}
 		// コメント検出
 		if(line.startsWith(L"//") || line.startsWith(L"#")){
 			m_list.push_back(new CommentRecord(line, filepath));

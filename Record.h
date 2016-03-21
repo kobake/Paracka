@@ -21,28 +21,44 @@ public:
 	
 	mystring getFileName() const;
 
+	void toggleMarking()
+	{
+		if(m_marking == L""){
+			m_marking = L"# š";
+		}
+		else{
+			m_marking = L"";
+		}
+	}
+
+	mystring getMarkingPrefix() const
+	{
+		if(m_marking == L"")return L"";
+		return L"š\r\n";
+	}
+
 	// •\Ž¦•¶Žš—ñ
 	mystring getQuestionText() const
 	{
-		return m_q;
+		return getMarkingPrefix() + m_q;
 	}
 	mystring getQuestionWithAnswerText() const
 	{
 		wchar_t buf[1024];
 		swprintf(buf, _countof(buf), L"%ls\r\n\r\n%ls", this->m_q.c_str(), this->m_a.c_str());
-		return buf;
+		return getMarkingPrefix() + buf;
 	}
 	mystring getGoodText() const
 	{
 		wchar_t buf[1024];
 		swprintf(buf, _countof(buf), L"%ls\r\n\r\n ++ ++ Good !! ++ ++", this->m_q.c_str());
-		return buf;
+		return getMarkingPrefix() + buf;
 	}
 	mystring getBadText() const
 	{
 		wchar_t buf[1024];
 		swprintf(buf, _countof(buf), L"%ls\r\n\r\n ++ ++ Bad ... ++ ++", this->m_q.c_str());
-		return buf;
+		return getMarkingPrefix() + buf;
 	}
 };
 
