@@ -8,7 +8,6 @@
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 RecordList::RecordList()
 {
-	list.clear();
 	ans_flag=0;
 	//
 	turned=0;
@@ -21,7 +20,10 @@ RecordList::~RecordList()
 
 void RecordList::dispose()
 {
-	list.clear();
+	for(int i = 0; i < (int)m_list.size(); i++){
+		delete m_list[i];
+	}
+	m_list.clear();
 	ans_flag=0;
 //	turned=0;
 }
@@ -33,9 +35,9 @@ void RecordList::dispose()
 int RecordList::getAllNum()
 {
 	if(ans_flag==0){
-		return (int)list.size();
+		return (int)m_list.size();
 	}else{
-		return (int)list.size() - 1;
+		return (int)m_list.size() - 1;
 	}
 }
 
@@ -43,9 +45,9 @@ mystring RecordList::getQes(int index)
 {
 	if(index>=0 && index<getAllNum()){
 		if(turned==0){
-			return list[index].q;
+			return m_list[index]->q;
 		}else{
-			return list[index].a[0];
+			return m_list[index]->a[0];
 		}
 	}else{
 		return NULL;
@@ -54,7 +56,7 @@ mystring RecordList::getQes(int index)
 mystring RecordList::getFileName(int index)
 {
 	if(index>=0 && index<getAllNum()){
-		return CFilePath(list[index].filepath).GetTitle();
+		return CFilePath(m_list[index]->filepath).GetTitle();
 	}else{
 		return L"?";
 	}
@@ -64,9 +66,9 @@ mystring RecordList::getAns(int q_index,int a_index)
 {
 	if(q_index>=0 && q_index<getAllNum()){
 		if(turned==0){
-			return list[q_index].a[a_index];
+			return m_list[q_index]->a[a_index];
 		}else{
-			return list[q_index].q;
+			return m_list[q_index]->q;
 		}
 	}else{
 		return NULL;
@@ -92,18 +94,14 @@ void RecordList::_listDeleteAll()
 void RecordList::_listAdd(const wchar_t *p, const mystring& filepath)
 {
 	if(ans_flag==0){
-		list.push_back(Record());
-		Record& qa = list.back();
-
-
 		if(p[0]!='@'){
 			//単語モード
-			qa.set_kind(0);
-			qa.put_q(p, filepath);
+			m_list.push_back(new NormalRecord(p, filepath));
 			ans_flag=1;
 		}else{
 			//穴埋めモード
-			qa.set_kind(1);
+			m_list.push_back(new AnaumeRecord());
+			Record& qa = *m_list.back();
 			//
 			p++;
 			//問題 p の中から解答「(x)」を抜き出す
@@ -140,8 +138,9 @@ void RecordList::_listAdd(const wchar_t *p, const mystring& filepath)
 			*q=L'\0';
 			qa.put_q(_q, filepath);
 		}
-	}else{
-		list.back().put_a(p);
+	}
+	else{
+		m_list.back()->put_a(p);
 		ans_flag=0;
 	}
 }
