@@ -37,6 +37,33 @@ public:
 		return L"★\r\n";
 	}
 
+	// ファイル
+	void addToFile(FILE* fp) const
+	{
+		if(m_marking.length()){
+			_writeAsUtf8(fp, L"%ls\n", m_marking.c_str());
+		}
+		_writeAsUtf8(fp, L"%ls\n", m_q.c_str());
+		if(m_a.length()){
+			_writeAsUtf8(fp, L"%ls\n", m_a.c_str());
+		}
+	}
+	void _writeAsUtf8(FILE* fp, const wchar_t* str, ...) const
+	{
+		// 文字列フォーマット
+		wchar_t buf[2048];
+		va_list v;
+		va_start(v, str);
+		_vswprintf(buf, str, v);
+		va_end(v);
+
+		// UTF8変換
+		std::string utf8 = unicode2utf8(buf);
+
+		// 書き込み
+		fwrite(utf8.c_str(), 1, utf8.length(), fp);
+	}
+
 	// 表示文字列
 	mystring getQuestionText() const
 	{
@@ -64,19 +91,22 @@ public:
 
 class NormalRecord : public Record{
 public:
-	NormalRecord(const mystring& q, const mystring& filepath)
+	NormalRecord(const mystring& filepath, const mystring& q, bool marked)
 	{
-		this->m_q = q;
 		this->filepath = filepath;
+		this->m_q = q;
+		if(marked){
+			this->m_marking = L"# ★";
+		}
 	}
 	virtual bool isNormal() const	{ return true; }
 };
 
 class CommentRecord : public Record{
 public:
-	CommentRecord(const mystring& text, const mystring& filepath)
+	CommentRecord(const mystring& filepath, const mystring& text)
 	{
-		this->m_q = text;
 		this->filepath = filepath;
+		this->m_q = text;
 	}
 };

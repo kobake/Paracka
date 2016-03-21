@@ -1,7 +1,7 @@
 #include "include_com.h"
 #include "RecordList.h"
 #include <StringLib.h>
-
+#include <algorithm>
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 // コンストラクタ・デストラクタ
@@ -102,16 +102,22 @@ bool RecordList::_read(FileStream *in, const mystring& filepath)
 	}
 
 	// 読み取り
+	bool prevMarked = false;
 	for(int i = 0; i < (int)lines.size(); i++){
 		mystring line = lines[i];
 		// 空行
 		if(line.length() == 0){
-			m_list.push_back(new CommentRecord(line, filepath));
+			m_list.push_back(new CommentRecord(filepath, line));
+			continue;
+		}
+		// マーキング検出
+		if(line == L"# ★"){
+			prevMarked = true;
 			continue;
 		}
 		// コメント検出
 		if(line.startsWith(L"//") || line.startsWith(L"#")){
-			m_list.push_back(new CommentRecord(line, filepath));
+			m_list.push_back(new CommentRecord(filepath, line));
 			continue;
 		}
 		// テキスト
@@ -123,8 +129,9 @@ bool RecordList::_read(FileStream *in, const mystring& filepath)
 				lastRecord->m_a = line;
 			}
 			else{
-				m_list.push_back(new NormalRecord(line, filepath));
+				m_list.push_back(new NormalRecord(filepath, line, prevMarked));
 			}
+			prevMarked = false;
 			continue;
 		}
 	}
@@ -145,3 +152,17 @@ bool RecordList::loadFile(const std::vector<std::wstring>& paths)
 	return true;
 }
 
+void RecordList::saveFile()
+{
+	std::map<std::wstring, FILE*> fps;
+	for(int i = 0; i < (int)this->m_list.size(); i++){
+		Record& record = *m_list[i];
+		if(fps[record.filepath] == NULL){
+			fps[record.filepath] = _wfopen(record.filepath.c_str(), L"wt");
+		}
+		record.addToFile(fps[record.filepath]);
+	}
+	std::for_each(fps.begin(), fps.end(), [](const std::pair<std::wstring, FILE*>& e){
+		fclose(e.second);
+	});
+}

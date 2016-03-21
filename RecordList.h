@@ -31,6 +31,7 @@ public:
 	void _listAdd(const wchar_t *p, const mystring& filepath); //ポインタリストの追加
 	//ファイル
 	bool loadFile(const std::vector<std::wstring>& paths);
+	void saveFile();
 	void dispose();
 private:
 	bool _read(FileStream *in, const mystring& filepath);

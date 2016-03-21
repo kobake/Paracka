@@ -256,6 +256,7 @@ LRESULT MainWindow::onCommand(UINT msg,WPARAM wParam,LPARAM lParam)
 	case IDM_FUNC_MARKING:
 		m_allList.getNormalAt(qindex).toggleMarking();
 		refreshText();
+		m_allList.saveFile();
 		break;
 	case IDM_FUNC_START:
 		//—”Ø½Ä‚Ìì¬
