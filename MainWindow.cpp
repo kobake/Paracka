@@ -366,7 +366,7 @@ void MainWindow::showGood(int a_index)
 {
 	if(m_allList.getNormalAt(qindex).isNormal()){
 		qstep=2;
-		edtQes->setTextF(L"%ls\r\n\r\n ++ ++ Good !! ++ ++", m_allList.getNormalAt(qindex).m_q.c_str());
+		edtQes->setTextF(m_allList.getNormalAt(qindex).getGoodText().c_str());
 	}
 	setButtonEnabled(true);
 }
@@ -375,32 +375,15 @@ void MainWindow::showBad()
 {
 	qstep=3;
 	if(m_allList.getNormalAt(qindex).isNormal()){
-		edtQes->setTextF(L"%ls\r\n\r\n ++ ++ Bad ... ++ ++",m_allList.getNormalAt(qindex).m_q.c_str());
+		edtQes->setTextF(m_allList.getNormalAt(qindex).getBadText().c_str());
 	}
 	setButtonEnabled(true);
-}
-
-const wchar_t *MainWindow::getMarkString()
-{
-	static wchar_t tmp[1024];
-	wcscpy(tmp, m_allList.getNormalAt(qindex).m_q.c_str());
-	for(int i=0; i < (int)m_allList.getNormalAt(qindex).m_a.size(); i++){
-		if(mark[i]==-1){
-			wcsreplace_once(tmp,L"(    )",tmp_swprintf(L"( %s )",m_allList.getNormalAt(qindex).m_a.c_str()));
-		}else if(mark[i]==1){
-			wcsreplace_once(tmp,L"(    )",tmp_swprintf(L"( %sI )",m_allList.getNormalAt(qindex).m_a.c_str()));
-		}else{
-			wcsreplace_once(tmp,L"(    )",L"()");
-		}
-	}
-	wcsreplace(tmp,L"()",L"(    )");
-	return tmp;
 }
 
 void MainWindow::showQes(bool reset_ans)
 {
 	qstep=0;
-	edtQes->setText(m_allList.getNormalAt(qindex).m_q.c_str());
+	edtQes->setText(m_allList.getNormalAt(qindex).getQuestionText());
 	//
 	createAnsEdit(m_allList.getNormalAt(qindex).m_a.size());
 	if(reset_ans){ for(int i=0;i<n_edtAns;i++)edtAns[i]->setText(L""); }
@@ -418,15 +401,8 @@ void MainWindow::showAns(int a_index)
 {
 	qstep=1;
 	if(m_allList.getNormalAt(qindex).isNormal()){
-		edtQes->setTextF(L"%ls\r\n\r\n%ls", m_allList.getNormalAt(qindex).m_q.c_str(), m_allList.getNormalAt(qindex).m_a.c_str());
-	}else{
-		mark[a_index]=-1;
-		//
-		edtQes->setText(getMarkString());
+		edtQes->setTextF(m_allList.getNormalAt(qindex).getQuestionWithAnswerText().c_str());
 	}
-//	btnEnter->setText(L"“Yí(Enter)");	mnuMain->setItemTextByID(IDM_FUNC_ENTER,L"“Yí(&R)");
-//	btnView->setText(L"“š‚¦‚ð‰B‚·(&L)");	mnuMain->setItemTextByID(IDM_FUNC_VIEW,L"“š‚¦‚ð‰B‚·(&L)");
-//	setButtonEnabled(true);
 }
 
 void MainWindow::showCongratulation()
@@ -443,9 +419,6 @@ void MainWindow::hideAns(int a_index)
 {
 	if(m_allList.getNormalAt(qindex).isNormal()){
 		showQes(false);
-	}else{
-		mark[a_index]=0;
-		edtQes->setText(getMarkString());
 	}
 }
 
