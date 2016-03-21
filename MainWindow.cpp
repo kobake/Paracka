@@ -257,8 +257,23 @@ LRESULT MainWindow::onCommand(UINT msg,WPARAM wParam,LPARAM lParam)
 	case IDM_FUNC_MARKING:
 		if(qindex < m_allList.getValidCount()){
 			m_allList.getValidAt(qindex).toggleMarking();
-			refreshText();
 			m_allList.saveFile();
+			if(m_allList.isFiltering()){
+				// 乱数テーブル構築しなおし
+				rndtable.create(m_allList.getValidCount());
+
+				// 問題の表示
+				if(rndtable.getSize()>0){
+					qindex=rndtable.getNext();
+					showQes();
+				}else{
+					showNone();
+				}
+				updateCaption();
+			}
+			else{
+				refreshText();
+			}
 		}
 		break;
 	case IDM_FUNC_FILTER_MARKING:

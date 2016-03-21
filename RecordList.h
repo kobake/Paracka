@@ -35,6 +35,9 @@ public:
 	void toggleFilter(){
 		m_markingOnly = !m_markingOnly;
 	}
+	bool isFiltering() const{
+		return m_markingOnly;
+	}
 	//ポインタリスト
 	void _listDeleteAll();        //ポインタリストすべて削除
 	void _listAdd(const wchar_t *p, const mystring& filepath); //ポインタリストの追加
