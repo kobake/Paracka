@@ -1,12 +1,12 @@
 #include "include_com.h"
-#include "QesData.h"
+#include "RecordList.h"
 #include <StringLib.h>
 
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 // コンストラクタ・デストラクタ
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-QesData::QesData()
+RecordList::RecordList()
 {
 	list.clear();
 	ans_flag=0;
@@ -14,12 +14,12 @@ QesData::QesData()
 	turned=0;
 }
 
-QesData::~QesData()
+RecordList::~RecordList()
 {
 	dispose();
 }
 
-void QesData::dispose()
+void RecordList::dispose()
 {
 	list.clear();
 	ans_flag=0;
@@ -30,7 +30,7 @@ void QesData::dispose()
 // 問題と解答 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-int QesData::getAllNum()
+int RecordList::getAllNum()
 {
 	if(ans_flag==0){
 		return (int)list.size();
@@ -39,7 +39,7 @@ int QesData::getAllNum()
 	}
 }
 
-mystring QesData::getQes(int index)
+mystring RecordList::getQes(int index)
 {
 	if(index>=0 && index<getAllNum()){
 		if(turned==0){
@@ -51,7 +51,7 @@ mystring QesData::getQes(int index)
 		return NULL;
 	}
 }
-mystring QesData::getFileName(int index)
+mystring RecordList::getFileName(int index)
 {
 	if(index>=0 && index<getAllNum()){
 		return CFilePath(list[index].filepath).GetTitle();
@@ -60,7 +60,7 @@ mystring QesData::getFileName(int index)
 	}
 }
 
-mystring QesData::getAns(int q_index,int a_index)
+mystring RecordList::getAns(int q_index,int a_index)
 {
 	if(q_index>=0 && q_index<getAllNum()){
 		if(turned==0){
@@ -73,7 +73,7 @@ mystring QesData::getAns(int q_index,int a_index)
 	}
 }
 
-void QesData::turn()
+void RecordList::turn()
 {
 	turned=(1-turned);
 }
@@ -84,12 +84,12 @@ void QesData::turn()
 // ポインタリスト
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-void QesData::_listDeleteAll()
+void RecordList::_listDeleteAll()
 {
 	dispose();
 }
 
-void QesData::_listAdd(const wchar_t *p, const mystring& filepath)
+void RecordList::_listAdd(const wchar_t *p, const mystring& filepath)
 {
 	if(ans_flag==0){
 		list.push_back(Record());
@@ -150,7 +150,7 @@ void QesData::_listAdd(const wchar_t *p, const mystring& filepath)
 // ファイル入出力 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-bool QesData::_read(FileStream *in, const mystring& filepath)
+bool RecordList::_read(FileStream *in, const mystring& filepath)
 {
 	// _listDeleteAll();
 	//全テキスト読み込み → textbuf
@@ -233,7 +233,7 @@ token:;
 	return true;
 }
 
-bool QesData::loadFile(const std::vector<std::wstring>& paths)
+bool RecordList::loadFile(const std::vector<std::wstring>& paths)
 {
 	_listDeleteAll();
 	for(int i = 0; i < (int)paths.size(); i++){

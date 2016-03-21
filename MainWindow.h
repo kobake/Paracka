@@ -5,7 +5,7 @@ class MainWindow;
 
 #include "c_CustomWindow.h"
 
-#include "QesData.h"
+#include "RecordList.h"
 #include "RndTable.h"
 class WaveSound;
 
@@ -91,7 +91,7 @@ private:
 
 	//ÉfÅ[É^
 	std::vector<std::wstring> m_paths;
-	QesData qes;
+	RecordList qes;
 	RndTable rndtable;
 	int qnum;
 	int qindex;

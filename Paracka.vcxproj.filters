@@ -34,10 +34,10 @@
     <ClInclude Include="MainWindow.h">
       <Filter>Source Files\Window</Filter>
     </ClInclude>
-    <ClInclude Include="QesData.h">
+    <ClInclude Include="Record.h">
       <Filter>Source Files\Data</Filter>
     </ClInclude>
-    <ClInclude Include="Record.h">
+    <ClInclude Include="RecordList.h">
       <Filter>Source Files\Data</Filter>
     </ClInclude>
   </ItemGroup>
@@ -54,10 +54,10 @@
     <ClCompile Include="MainWindow.cpp">
       <Filter>Source Files\Window</Filter>
     </ClCompile>
-    <ClCompile Include="QesData.cpp">
+    <ClCompile Include="Record.cpp">
       <Filter>Source Files\Data</Filter>
     </ClCompile>
-    <ClCompile Include="Record.cpp">
+    <ClCompile Include="RecordList.cpp">
       <Filter>Source Files\Data</Filter>
     </ClCompile>
   </ItemGroup>

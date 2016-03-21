@@ -1,7 +1,7 @@
 #pragma once
 
 #include <StringLib.h>
-class QesData;
+class RecordList;
 
 struct Record{
 	mystring q;
