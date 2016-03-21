@@ -163,72 +163,44 @@ bool RecordList::_read(FileStream *in, const mystring& filepath)
 	std::vector<wchar_t> wbuf(wbuflen + 1);
 	wbuflen = ::MultiByteToWideChar(CP_UTF8, 0, &textbuf[0], nbuf, &wbuf[0], wbuflen);
 	wbuf[wbuflen] = 0;
-	
-	//ポインタリストの作成
-	wchar_t *p=&wbuf[0];
-	wchar_t *begin=p;
-	int is_text=0;
-	int is_comment=0;
-	while(*p!='\0'){
-		if(is_comment==0){
-			//コメント検出 (//または#)
-			if(*p==L'/'){
-				if(*(p+1)==L'/'){
-					is_comment=1;
-					is_text=0;
-					continue;
-				}else if(*(p+1)==L'*'){
-					is_comment=2;
-					is_text=0;
-					continue;
-				}
+
+	// \rは取り除く
+	::wcsreplace(&wbuf[0], L"\r", L"");
+
+	// 行リストに変換
+	std::vector<mystring> lines;
+	{
+		const wchar_t* p = &wbuf[0];
+		const wchar_t* start = p;
+		const wchar_t* end = p;
+		while(1){
+			if(*p == L'\n' || *p == L'\0'){
+				const wchar_t* end = p;
+				mystring line(start, p);
+				lines.push_back(line);
+				if(*p == L'\0')break;
+				p++;
+				start = p;
 			}
-			else if(*p == L'#'){
-				is_comment = 1;
-				is_text = 0;
-				continue;
+			else{
+				p++;
 			}
-			//トークン検出
-			if(*p==L'\\'){
-				//改行変換
-				if(*(p+1)==L'\n'){		//行末に \ があった場合、改行
-					*p++=L'\r';
-					*p=L'\n';
-				}else if(*(p+1)=='n'){	//トークン内に \n があった場合、改行
-					*p++=L'\r';
-					*p=L'\n';
-				}else{
-					goto token;
-				}
-			}else if(*p==L'\t' || *p==L'\n'){
-				*p=L'\0';
-				if(is_text==1){
-					_listAdd(begin, filepath);
-					is_text=0;
-				}
-			}else{
-token:;
-				if(is_text==0){
-					begin=p;
-					is_text=1;
-				}
-			}
-		}else if(is_comment==1){
-			//コメントスキップ
-			if(*p==L'\n'){
-				is_comment=0;
-			}
-			*p=L'\0';
-		}else if(is_comment==2){
-			//コメントスキップ
-			if(*p==L'*' && *(p+1)==L'/'){
-				*(p+1)=L'\0';
-				is_comment=0;
-			}
-			*p=L'\0';
 		}
-		p++;
 	}
+
+	// 読み取り
+	for(int i = 0; i < (int)lines.size(); i++){
+		mystring line = lines[i];
+		// コメント検出
+		if(line.startsWith(L"//") || line.startsWith(L"#")){
+			continue;
+		}
+		// テキスト
+		if(line.length() > 0){
+			_listAdd(line.c_str(), filepath);
+		}
+	}
+	
 	return true;
 }
 
