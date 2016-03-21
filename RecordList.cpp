@@ -11,6 +11,7 @@ RecordList::RecordList()
 	ans_flag=0;
 	//
 	turned=0;
+	m_markingOnly = false;
 }
 
 RecordList::~RecordList()
@@ -32,11 +33,11 @@ void RecordList::dispose()
 // –â‘è‚Æ‰ð“š 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-int RecordList::getNormalCount()
+int RecordList::getValidCount()
 {
 	int cnt = 0;
 	for(int i = 0; i < (int)m_list.size(); i++){
-		if(m_list[i]->isNormal())cnt++;
+		if(isValidRecord(*m_list[i]))cnt++;
 	}
 	return cnt;
 }
