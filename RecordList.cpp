@@ -114,8 +114,8 @@ bool RecordList::_read(FileStream *in, const mystring& filepath)
 			Record* lastRecord = NULL;
 			if(m_list.size() > 0)lastRecord = m_list.back();
 
-			if(lastRecord && lastRecord->isNormal() && lastRecord->a.length() == 0){
-				lastRecord->a = line;
+			if(lastRecord && lastRecord->isNormal() && lastRecord->m_a.length() == 0){
+				lastRecord->m_a = line;
 			}
 			else{
 				m_list.push_back(new NormalRecord(line, filepath));

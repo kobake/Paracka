@@ -167,7 +167,7 @@ LRESULT MainWindow::onNotify(UINT msg,WPARAM wParam,LPARAM lParam)
 			}else if(rndtable.getSize()>0){
 				//解答チェック
 				wchar_t *p=edtAns[i]->getTextTemp();
-				if(wcscmp(p, m_allList.getNormalAt(qindex).a.c_str())==0){
+				if(wcscmp(p, m_allList.getNormalAt(qindex).m_a.c_str())==0){
 					sndOk->play();
 					showGood(i);
 				}else{
@@ -285,7 +285,7 @@ LRESULT MainWindow::onCommand(UINT msg,WPARAM wParam,LPARAM lParam)
 					if(rndtable.getSize()>0){
 						//解答チェック
 						wchar_t *p=edtAns[i]->getTextTemp();
-						if(wcscmp(p, m_allList.getNormalAt(qindex).a.c_str())==0){
+						if(wcscmp(p, m_allList.getNormalAt(qindex).m_a.c_str())==0){
 							sndOk->play();
 							showGood(i);
 							if(!mark_is_all_good()){
@@ -366,7 +366,7 @@ void MainWindow::showGood(int a_index)
 {
 	if(m_allList.getNormalAt(qindex).isNormal()){
 		qstep=2;
-		edtQes->setTextF(L"%ls\r\n\r\n ++ ++ Good !! ++ ++", m_allList.getNormalAt(qindex).q.c_str());
+		edtQes->setTextF(L"%ls\r\n\r\n ++ ++ Good !! ++ ++", m_allList.getNormalAt(qindex).m_q.c_str());
 	}
 	setButtonEnabled(true);
 }
@@ -375,7 +375,7 @@ void MainWindow::showBad()
 {
 	qstep=3;
 	if(m_allList.getNormalAt(qindex).isNormal()){
-		edtQes->setTextF(L"%ls\r\n\r\n ++ ++ Bad ... ++ ++",m_allList.getNormalAt(qindex).q.c_str());
+		edtQes->setTextF(L"%ls\r\n\r\n ++ ++ Bad ... ++ ++",m_allList.getNormalAt(qindex).m_q.c_str());
 	}
 	setButtonEnabled(true);
 }
@@ -383,12 +383,12 @@ void MainWindow::showBad()
 const wchar_t *MainWindow::getMarkString()
 {
 	static wchar_t tmp[1024];
-	wcscpy(tmp, m_allList.getNormalAt(qindex).q.c_str());
-	for(int i=0; i < (int)m_allList.getNormalAt(qindex).a.size(); i++){
+	wcscpy(tmp, m_allList.getNormalAt(qindex).m_q.c_str());
+	for(int i=0; i < (int)m_allList.getNormalAt(qindex).m_a.size(); i++){
 		if(mark[i]==-1){
-			wcsreplace_once(tmp,L"(    )",tmp_swprintf(L"( %s )",m_allList.getNormalAt(qindex).a.c_str()));
+			wcsreplace_once(tmp,L"(    )",tmp_swprintf(L"( %s )",m_allList.getNormalAt(qindex).m_a.c_str()));
 		}else if(mark[i]==1){
-			wcsreplace_once(tmp,L"(    )",tmp_swprintf(L"( %s！ )",m_allList.getNormalAt(qindex).a.c_str()));
+			wcsreplace_once(tmp,L"(    )",tmp_swprintf(L"( %s！ )",m_allList.getNormalAt(qindex).m_a.c_str()));
 		}else{
 			wcsreplace_once(tmp,L"(    )",L"()");
 		}
@@ -400,9 +400,9 @@ const wchar_t *MainWindow::getMarkString()
 void MainWindow::showQes(bool reset_ans)
 {
 	qstep=0;
-	edtQes->setText(m_allList.getNormalAt(qindex).q.c_str());
+	edtQes->setText(m_allList.getNormalAt(qindex).m_q.c_str());
 	//
-	createAnsEdit(m_allList.getNormalAt(qindex).a.size());
+	createAnsEdit(m_allList.getNormalAt(qindex).m_a.size());
 	if(reset_ans){ for(int i=0;i<n_edtAns;i++)edtAns[i]->setText(L""); }
 //	btnEnter->setText(L"添削(Enter)");	mnuMain->setItemTextByID(IDM_FUNC_ENTER,L"添削(&R)");
 //	btnView->setText(L"答えを見る(&L)");	mnuMain->setItemTextByID(IDM_FUNC_VIEW,L"答えを見る(&L)");
@@ -418,7 +418,7 @@ void MainWindow::showAns(int a_index)
 {
 	qstep=1;
 	if(m_allList.getNormalAt(qindex).isNormal()){
-		edtQes->setTextF(L"%ls\r\n\r\n%ls", m_allList.getNormalAt(qindex).q.c_str(), m_allList.getNormalAt(qindex).a.c_str());
+		edtQes->setTextF(L"%ls\r\n\r\n%ls", m_allList.getNormalAt(qindex).m_q.c_str(), m_allList.getNormalAt(qindex).m_a.c_str());
 	}else{
 		mark[a_index]=-1;
 		//
@@ -460,7 +460,7 @@ void MainWindow::turnQesAns()
 		showAns(0); //####引数0は仮
 	}else if(qstep==2){
 		showGood(0); //####引数0は仮
-		edtAns[0]->setText(m_allList.getNormalAt(qindex).a); //####引数0は仮
+		edtAns[0]->setText(m_allList.getNormalAt(qindex).m_a); //####引数0は仮
 	}else if(qstep==4){
 		showCongratulation();
 	}else if(qstep==-1){
