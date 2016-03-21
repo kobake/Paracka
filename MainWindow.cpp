@@ -364,7 +364,7 @@ bool mark_is_all_good()
 
 void MainWindow::showGood(int a_index)
 {
-	if(m_recordList.getQesKind(qindex)==0){
+	if(m_recordList.getRecord(qindex).kind==0){
 		qstep=2;
 		edtQes->setTextF(L"%ls\r\n\r\n ++ ++ Good !! ++ ++", m_recordList.getQes(qindex).c_str());
 	}else{
@@ -380,7 +380,7 @@ void MainWindow::showGood(int a_index)
 void MainWindow::showBad()
 {
 	qstep=3;
-	if(m_recordList.getQesKind(qindex)==0){
+	if(m_recordList.getRecord(qindex).kind==0){
 		edtQes->setTextF(L"%ls\r\n\r\n ++ ++ Bad ... ++ ++",m_recordList.getQes(qindex).c_str());
 	}else{
 		edtQes->setTextF(L"%ls\r\n\r\n ++ ++ Bad ... ++ ++",getMarkString());
@@ -427,7 +427,7 @@ void MainWindow::showQes(bool reset_ans)
 void MainWindow::showAns(int a_index)
 {
 	qstep=1;
-	if(m_recordList.getQesKind(qindex)==0){
+	if(m_recordList.getRecord(qindex).kind==0){
 		edtQes->setTextF(L"%ls\r\n\r\n%ls", m_recordList.getQes(qindex).c_str(),m_recordList.getAns(qindex,0).c_str());
 	}else{
 		mark[a_index]=-1;
@@ -451,7 +451,7 @@ void MainWindow::showCongratulation()
 
 void MainWindow::hideAns(int a_index)
 {
-	if(m_recordList.getQesKind(qindex)==0){
+	if(m_recordList.getRecord(qindex).kind==0){
 		showQes(false);
 	}else{
 		mark[a_index]=0;
@@ -485,7 +485,7 @@ bool MainWindow::isGood()
 
 bool MainWindow::visibleAns(int a_index)
 {
-	if(m_recordList.getQesKind(qindex)==0){
+	if(m_recordList.getRecord(qindex).kind==0){
 		return qstep==1;
 	}else{
 		return mark[a_index]!=0;

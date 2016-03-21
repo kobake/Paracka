@@ -11,11 +11,16 @@ public:
 	virtual ~RecordList();
 	//問題と解答
 	int getAllNum();
+	Record& getRecord(int index)
+	{
+		return *m_list[index];
+	}
+
 	mystring getQes(int index);
 	mystring getFileName(int index);
 	mystring getAns(int q_index,int a_index);
 	int getAnsNum(int q_index){ return (int)m_list[q_index]->a.size(); }
-	int getQesKind(int q_index){ return m_list[q_index]->kind; }
+	//int getQesKind(int q_index){ return m_list[q_index]->kind; }
 	void turn();
 	//ポインタリスト
 	void _listDeleteAll();        //ポインタリストすべて削除
