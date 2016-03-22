@@ -102,6 +102,13 @@ bool RecordList::_read(FileStream *in, const mystring& filepath)
 		}
 	}
 
+	// ÅŒã‚Ì˜A‘±‰üs‚Í1‚Â‚É‚Ü‚Æ‚ß‚é
+	{
+		int cnt = (int)lines.size();
+		while(cnt > 0 && lines[cnt - 1] == L"")cnt--;
+		lines.resize(cnt);
+	}
+
 	// “Ç‚ÝŽæ‚è
 	bool prevMarked = false;
 	for(int i = 0; i < (int)lines.size(); i++){
