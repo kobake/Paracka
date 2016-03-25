@@ -10,33 +10,25 @@ public:
 	RecordList();
 	virtual ~RecordList();
 	// レコード判定
-	bool isValidRecord(const Record& record){
+	bool isValidRecord(const Record& record) const{
 		if(!record.isNormal())return false;
-		if(this->m_markingOnly && record.m_marking.length() == 0)return false;
+		if(record.m_markingLevel < this->m_filterLevel)return false;
 		return true;
 	}
 	//問題と解答
-	int getValidCount();
-	Record& getValidAt(int index)
-	{
-		int normalIndex = 0;
-		for(int i = 0; i < (int)m_list.size(); i++){
-			if(isValidRecord(*m_list[i])){
-				if(normalIndex == index){
-					return *m_list[i];
-				}
-				normalIndex++;
-			}
-		}
-		throw std::exception("getValidAt: record not found");
+	int getTotalCount() const{
+		return (int)m_list.size();
+	}
+	const Record& getTotalAt(int index) const{
+		return *m_list[index];
 	}
 
 	void turn();
 	void toggleFilter(){
-		m_markingOnly = !m_markingOnly;
+		m_filterLevel = (m_filterLevel + 1) % 3; // 0,1,2
 	}
-	bool isFiltering() const{
-		return m_markingOnly;
+	int getFilterLevel() const{
+		return m_filterLevel;
 	}
 	//ポインタリスト
 	void _listDeleteAll();        //ポインタリストすべて削除
@@ -52,7 +44,7 @@ private:
 	int ans_flag;
 	//反転フラグ
 	int turned;
-	// フィルタリングフラグ
-	bool m_markingOnly;
+	// フィルタリングレベル
+	int m_filterLevel; // 0:全表示 1:★と★★を表示 2:★★のみ表示
 };
 

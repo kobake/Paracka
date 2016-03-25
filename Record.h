@@ -6,13 +6,14 @@ class RecordList;
 struct Record{
 public:
 	mystring			filepath;
-	mystring			m_marking;
+	int					m_markingLevel;
 	mystring			m_q;
 	mystring			m_a;
 
 public:
 	Record()
 	{
+		m_markingLevel = 0;
 	}
 	virtual ~Record()
 	{
@@ -23,25 +24,29 @@ public:
 
 	void toggleMarking()
 	{
-		if(m_marking == L""){
-			m_marking = L"# Åö";
-		}
-		else{
-			m_marking = L"";
-		}
+		m_markingLevel = (m_markingLevel + 1) % 3; //0,1,2
 	}
-
+	mystring getMarkingString() const
+	{
+		mystring ret = L"";
+		for(int i = 0; i < m_markingLevel; i++){
+			ret += L"Åö";
+		}
+		return ret;
+	}
 	mystring getMarkingPrefix() const
 	{
-		if(m_marking == L"")return L"";
-		return L"Åö\r\n";
+		mystring ret = getMarkingString();
+		if(ret == L"")return L"";
+		else return ret + L"\r\n";
 	}
 
 	// ÉtÉ@ÉCÉã
 	void addToFile(FILE* fp) const
 	{
-		if(m_marking.length()){
-			_writeAsUtf8(fp, L"%ls\n", m_marking.c_str());
+		mystring marking = getMarkingString();
+		if(marking.length()){
+			_writeAsUtf8(fp, L"# %ls\n", marking.c_str());
 		}
 		_writeAsUtf8(fp, L"%ls\n", m_q.c_str());
 		if(m_a.length()){
@@ -91,13 +96,11 @@ public:
 
 class NormalRecord : public Record{
 public:
-	NormalRecord(const mystring& filepath, const mystring& q, bool marked)
+	NormalRecord(const mystring& filepath, const mystring& q, int markingLevel)
 	{
 		this->filepath = filepath;
 		this->m_q = q;
-		if(marked){
-			this->m_marking = L"# Åö";
-		}
+		this->m_markingLevel = markingLevel;
 	}
 	virtual bool isNormal() const	{ return true; }
 };

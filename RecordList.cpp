@@ -11,7 +11,7 @@ RecordList::RecordList()
 	ans_flag=0;
 	//
 	turned=0;
-	m_markingOnly = false;
+	this->m_filterLevel = 0;
 }
 
 RecordList::~RecordList()
@@ -32,15 +32,6 @@ void RecordList::dispose()
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 // 問題と解答 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-
-int RecordList::getValidCount()
-{
-	int cnt = 0;
-	for(int i = 0; i < (int)m_list.size(); i++){
-		if(isValidRecord(*m_list[i]))cnt++;
-	}
-	return cnt;
-}
 
 void RecordList::turn()
 {
@@ -110,7 +101,7 @@ bool RecordList::_read(FileStream *in, const mystring& filepath)
 	}
 
 	// 読み取り
-	bool prevMarked = false;
+	int prevMarked = 0;
 	for(int i = 0; i < (int)lines.size(); i++){
 		mystring line = lines[i];
 		// 空行
@@ -120,7 +111,11 @@ bool RecordList::_read(FileStream *in, const mystring& filepath)
 		}
 		// マーキング検出
 		if(line == L"# ★"){
-			prevMarked = true;
+			prevMarked = 1;
+			continue;
+		}
+		if(line == L"# ★★"){
+			prevMarked = 2;
 			continue;
 		}
 		// コメント検出
@@ -139,7 +134,7 @@ bool RecordList::_read(FileStream *in, const mystring& filepath)
 			else{
 				m_list.push_back(new NormalRecord(filepath, line, prevMarked));
 			}
-			prevMarked = false;
+			prevMarked = 0;
 			continue;
 		}
 	}

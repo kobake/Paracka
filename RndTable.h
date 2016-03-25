@@ -1,12 +1,13 @@
-class RndTable;
+#pragma once
 
-#ifndef _RndTable_
-#define _RndTable_
+#include <vector>
+class RecordList;
 
 class RndTable{
 protected:
-	int *list; //乱数テーブル
-	int size;  //サイズ
+	std::vector<int>	m_list;
+	int					m_firstSize;
+	
 	int index; //インデックス
 	int last_value;
 	int deleted_index;
@@ -15,8 +16,9 @@ public:
 	RndTable();
 	~RndTable();
 	//設定・取得
-	void create(int _size);
-	int getSize();
+	void create(const RecordList& list);
+	int getCurrentSize() const	{ return (int)m_list.size(); }
+	int getFirstSize() const	{ return m_firstSize; }
 	void clear(int value); //valueを出題対象から除去
 	void clearAll();
 	bool exists(int value);
@@ -27,5 +29,3 @@ public:
 	void _shuffle();
 	int _delete(int value);
 };
-
-#endif

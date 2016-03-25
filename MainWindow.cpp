@@ -161,16 +161,16 @@ LRESULT MainWindow::onNotify(UINT msg,WPARAM wParam,LPARAM lParam)
 				//次の問題へ
 				rndtable.clear(qindex);
 				updateCaption();
-				if(rndtable.getSize()>0){
+				if(rndtable.getCurrentSize()>0){
 					sendMenuClick(IDM_FUNC_PASS);
 				}else{
 					sndClear->play();
 					showCongratulation();
 				}
-			}else if(rndtable.getSize()>0){
+			}else if(rndtable.getCurrentSize()>0){
 				//解答チェック
 				wchar_t *p=edtAns[i]->getTextTemp();
-				if(wcscmp(p, m_allList.getValidAt(qindex).m_a.c_str())==0){
+				if(wcscmp(p, m_allList.getTotalAt(qindex).m_a.c_str())==0){
 					sndOk->play();
 					showGood(i);
 				}else{
@@ -196,9 +196,9 @@ void MainWindow::fileLoad(const std::vector<std::wstring>& paths)
 		m_paths = paths;
 		
 		//乱数ﾘｽﾄの作成
-		rndtable.create(m_allList.getValidCount());
+		rndtable.create(m_allList);
 		//
-		if(rndtable.getSize()>0){
+		if(rndtable.getCurrentSize()>0){
 			qindex=rndtable.getNext();
 			showQes();
 		}else{
@@ -255,36 +255,19 @@ LRESULT MainWindow::onCommand(UINT msg,WPARAM wParam,LPARAM lParam)
 		close();
 		break;
 	case IDM_FUNC_MARKING:
-		if(qindex < m_allList.getValidCount()){
-			m_allList.getValidAt(qindex).toggleMarking();
-			m_allList.saveFile();
-			if(m_allList.isFiltering()){
-				// 乱数テーブル構築しなおし
-				rndtable.create(m_allList.getValidCount());
-
-				// 問題の表示
-				if(rndtable.getSize()>0){
-					qindex=rndtable.getNext();
-					showQes();
-				}else{
-					showNone();
-				}
-				updateCaption();
-			}
-			else{
-				refreshText();
-			}
-		}
+		const_cast<Record&>(m_allList.getTotalAt(qindex)).toggleMarking();
+		m_allList.saveFile();
+		refreshText();
 		break;
 	case IDM_FUNC_FILTER_MARKING:
 		// フィルタリング切り替え
 		m_allList.toggleFilter();
 
 		// 乱数テーブル構築しなおし
-		rndtable.create(m_allList.getValidCount());
+		rndtable.create(m_allList);
 
 		// 問題の表示
-		if(rndtable.getSize()>0){
+		if(rndtable.getCurrentSize()>0){
 			qindex=rndtable.getNext();
 			showQes();
 		}else{
@@ -294,9 +277,9 @@ LRESULT MainWindow::onCommand(UINT msg,WPARAM wParam,LPARAM lParam)
 		break;
 	case IDM_FUNC_START:
 		//乱数ﾘｽﾄの作成
-		rndtable.create(m_allList.getValidCount());
+		rndtable.create(m_allList);
 		//
-		if(rndtable.getSize()>0){
+		if(rndtable.getCurrentSize()>0){
 			qindex=rndtable.getNext();
 			showQes();
 		}else{
@@ -309,7 +292,7 @@ LRESULT MainWindow::onCommand(UINT msg,WPARAM wParam,LPARAM lParam)
 			//次の問題へ
 			rndtable.clear(qindex);
 			updateCaption();
-			if(rndtable.getSize()>0){
+			if(rndtable.getCurrentSize()>0){
 				sendMenuClick(IDM_FUNC_PASS);
 			}else{
 				sndClear->play();
@@ -319,10 +302,10 @@ LRESULT MainWindow::onCommand(UINT msg,WPARAM wParam,LPARAM lParam)
 			for(int i=0;i<n_edtAns;i++){
 				if(GetFocus()==edtAns[i]->getHWND()){
 					//sendMenuClick(IDM_FUNC_ENTER);
-					if(rndtable.getSize()>0){
+					if(rndtable.getCurrentSize()>0){
 						//解答チェック
 						wchar_t *p=edtAns[i]->getTextTemp();
-						if(wcscmp(p, m_allList.getValidAt(qindex).m_a.c_str())==0){
+						if(wcscmp(p, m_allList.getTotalAt(qindex).m_a.c_str())==0){
 							sndOk->play();
 							showGood(i);
 							if(!mark_is_all_good()){
@@ -340,13 +323,13 @@ LRESULT MainWindow::onCommand(UINT msg,WPARAM wParam,LPARAM lParam)
 		}
 		break;
 	case IDM_FUNC_PASS:
-		if(rndtable.getSize()>0){
+		if(rndtable.getCurrentSize()>0){
 			qindex=rndtable.getNext();
 			showQes();
 		}
 		break;
 	case IDM_FUNC_VIEW:
-		if(rndtable.getSize()>0){
+		if(rndtable.getCurrentSize()>0){
 			int f=0;
 			//ﾌｫｰｶｽのあるｴﾃﾞｨｯﾄﾎﾞｯｸｽについて適用
 			for(int i=0;i<n_edtAns;i++){
@@ -373,7 +356,7 @@ LRESULT MainWindow::onCommand(UINT msg,WPARAM wParam,LPARAM lParam)
 		}
 		break;
 	case IDM_FUNC_TURN:
-		if(rndtable.getSize()>0){
+		if(rndtable.getCurrentSize()>0){
 			turnQesAns();
 		}
 		break;
@@ -402,23 +385,23 @@ bool mark_is_all_good()
 void MainWindow::showGood(int a_index)
 {
 	qstep=2;
-	edtQes->setTextF(m_allList.getValidAt(qindex).getGoodText().c_str());
+	edtQes->setTextF(m_allList.getTotalAt(qindex).getGoodText().c_str());
 	setButtonEnabled(true);
 }
 
 void MainWindow::showBad()
 {
 	qstep=3;
-	edtQes->setTextF(m_allList.getValidAt(qindex).getBadText().c_str());
+	edtQes->setTextF(m_allList.getTotalAt(qindex).getBadText().c_str());
 	setButtonEnabled(true);
 }
 
 void MainWindow::showQes(bool reset_ans)
 {
 	qstep=0;
-	edtQes->setText(m_allList.getValidAt(qindex).getQuestionText());
+	edtQes->setText(m_allList.getTotalAt(qindex).getQuestionText());
 	//
-	createAnsEdit(m_allList.getValidAt(qindex).m_a.size());
+	createAnsEdit(m_allList.getTotalAt(qindex).m_a.size());
 	if(reset_ans){ for(int i=0;i<n_edtAns;i++)edtAns[i]->setText(L""); }
 //	btnEnter->setText(L"添削(Enter)");	mnuMain->setItemTextByID(IDM_FUNC_ENTER,L"添削(&R)");
 //	btnView->setText(L"答えを見る(&L)");	mnuMain->setItemTextByID(IDM_FUNC_VIEW,L"答えを見る(&L)");
@@ -433,7 +416,7 @@ void MainWindow::showQes(bool reset_ans)
 void MainWindow::showAns(int a_index)
 {
 	qstep=1;
-	edtQes->setTextF(m_allList.getValidAt(qindex).getQuestionWithAnswerText().c_str());
+	edtQes->setTextF(m_allList.getTotalAt(qindex).getQuestionWithAnswerText().c_str());
 }
 
 void MainWindow::showCongratulation()
@@ -459,7 +442,7 @@ void MainWindow::refreshText()
 		showAns(0); //####引数0は仮
 	}else if(qstep==2){
 		showGood(0); //####引数0は仮
-		edtAns[0]->setText(m_allList.getValidAt(qindex).m_a); //####引数0は仮
+		edtAns[0]->setText(m_allList.getTotalAt(qindex).m_a); //####引数0は仮
 	}else if(qstep==4){
 		showCongratulation();
 	}else if(qstep==-1){
@@ -481,7 +464,7 @@ bool MainWindow::isGood()
 
 bool MainWindow::visibleAns(int a_index)
 {
-	if(m_allList.getValidAt(qindex).isNormal()){
+	if(m_allList.getTotalAt(qindex).isNormal()){
 		return qstep==1;
 	}else{
 		return mark[a_index]!=0;
@@ -518,15 +501,18 @@ void MainWindow::updateCaption()
 	}
 	else{
 		name = L"複数";
-		if(qindex >= 0 && qindex < m_allList.getValidCount()){
-			name += L" (" + m_allList.getValidAt(qindex).getFileName() + L")";
+		if(qindex >= 0 && qindex < m_allList.getTotalCount()){
+			name += L" (" + m_allList.getTotalAt(qindex).getFileName() + L")";
 		}
 	}
 
 	// フィルタリングモード
 	mystring mode = L"";
-	if(m_allList.isFiltering()){
-		mode = L"★のみ";
+	if(m_allList.getFilterLevel() > 0){
+		for(int i = 0; i < m_allList.getFilterLevel(); i++){
+			mode += L"★";
+		}
+		mode +=  L"以上";
 	}
 	else{
 		mode = L"全表示";
@@ -535,8 +521,8 @@ void MainWindow::updateCaption()
 	// キャプション設定
 	setTextF(L"%ls (残り %02d/%02d) (%ls) - Paracka",
 		name.c_str(),
-		rndtable.getSize(),
-		m_allList.getValidCount(),
+		rndtable.getCurrentSize(),
+		rndtable.getFirstSize(),
 		mode.c_str()
 	);
 }
