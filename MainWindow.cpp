@@ -523,10 +523,20 @@ void MainWindow::updateCaption()
 		}
 	}
 
+	// フィルタリングモード
+	mystring mode = L"";
+	if(m_allList.isFiltering()){
+		mode = L"★のみ";
+	}
+	else{
+		mode = L"全表示";
+	}
+
 	// キャプション設定
-	setTextF(L"%ls (残り %02d/%02d) - Paracka",
+	setTextF(L"%ls (残り %02d/%02d) (%ls) - Paracka",
 		name.c_str(),
 		rndtable.getSize(),
-		m_allList.getValidCount()
+		m_allList.getValidCount(),
+		mode.c_str()
 	);
 }
