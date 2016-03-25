@@ -19,14 +19,14 @@ MainWindow::MainWindow(const wstring& caption,int x,int y,int w,int h,Window *_p
 	Window::setFontOnCreate(font);
 	//ﾒﾆｭｰ
 	MENUDEF menudef[]={
-		L"ファイル(&F)",						-1,							KMENU_POPUP,
-			L"開く(&O)\tCtrl+O",				IDM_FILE_OPEN,				0,
-			L"再読み込み(&R)\tCtrl+R",			IDM_FILE_RELOAD,			0,
-			L"-",								-1,							0,
-			L"終了(&X)\tAlt+F4",				IDM_FILE_QUIT,				KMENU_POPEND,
-		L"機能(&F)",							-1,							KMENU_POPUP,
-			L"マーキング(&M)\tCtrl+M",			IDM_FUNC_MARKING,			0,
-			L"マーキングのみに絞り込む(&F)",	IDM_FUNC_FILTER_MARKING,	0,
+		L"ファイル(&F)",								-1,							KMENU_POPUP,
+			L"開く(&O)\tCtrl+O",						IDM_FILE_OPEN,				0,
+			L"再読み込み(&R)\tCtrl+R",					IDM_FILE_RELOAD,			0,
+			L"-",										-1,							0,
+			L"終了(&X)\tAlt+F4",						IDM_FILE_QUIT,				KMENU_POPEND,
+		L"機能(&F)",									-1,							KMENU_POPUP,
+			L"マーキング(&M)\tCtrl+M",					IDM_FUNC_MARKING,			0,
+			L"マーキングのみに絞り込む(&F)\tCtrl+F",	IDM_FUNC_FILTER_MARKING,	0,
 			L"-",						-1,					0,
 			L"初めから(&S)",			IDM_FUNC_START,		0,
 			L"-",						-1,					0,
