@@ -13,6 +13,9 @@ public:
 	bool isValidRecord(const Record& record) const{
 		if(!record.isNormal())return false;
 		if(record.m_markingLevel < this->m_filterLevel)return false;
+		if(m_filterLevel == -1){
+			return record.m_markingLevel == 0; // ŠÈ’P‚Ì‚Ý
+		}
 		return true;
 	}
 	//–â‘è‚Æ‰ð“š
@@ -25,7 +28,9 @@ public:
 
 	void turn();
 	void toggleFilter(){
-		m_filterLevel = (m_filterLevel + 1) % 3; // 0,1,2
+		// -1,0,1,2
+		m_filterLevel++;
+		if(m_filterLevel > 2)m_filterLevel = -1;
 	}
 	int getFilterLevel() const{
 		return m_filterLevel;

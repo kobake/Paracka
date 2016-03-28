@@ -514,6 +514,9 @@ void MainWindow::updateCaption()
 		}
 		mode +=  L"à»è„";
 	}
+	else if(m_allList.getFilterLevel() == -1){
+		mode = L"ä»íPÇÃÇ›";
+	}
 	else{
 		mode = L"ëSï\é¶";
 	}
