@@ -16,7 +16,7 @@ public:
 	RndTable();
 	~RndTable();
 	//İ’èEæ“¾
-	void create(const RecordList& list);
+	void generateTable(const RecordList& list);
 	int getCurrentSize() const	{ return (int)m_list.size(); }
 	int getFirstSize() const	{ return m_firstSize; }
 	void clear(int value); //value‚ğo‘è‘ÎÛ‚©‚çœ‹

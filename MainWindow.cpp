@@ -196,7 +196,7 @@ void MainWindow::fileLoad(const std::vector<std::wstring>& paths)
 		m_paths = paths;
 		
 		//乱数ﾘｽﾄの作成
-		rndtable.create(m_allList);
+		rndtable.generateTable(m_allList);
 		//
 		if(rndtable.getCurrentSize()>0){
 			qindex=rndtable.getNext();
@@ -264,7 +264,7 @@ LRESULT MainWindow::onCommand(UINT msg,WPARAM wParam,LPARAM lParam)
 		m_allList.toggleFilter();
 
 		// 乱数テーブル構築しなおし
-		rndtable.create(m_allList);
+		rndtable.generateTable(m_allList);
 
 		// 問題の表示
 		if(rndtable.getCurrentSize()>0){
@@ -277,7 +277,7 @@ LRESULT MainWindow::onCommand(UINT msg,WPARAM wParam,LPARAM lParam)
 		break;
 	case IDM_FUNC_START:
 		//乱数ﾘｽﾄの作成
-		rndtable.create(m_allList);
+		rndtable.generateTable(m_allList);
 		//
 		if(rndtable.getCurrentSize()>0){
 			qindex=rndtable.getNext();

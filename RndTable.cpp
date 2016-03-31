@@ -21,7 +21,7 @@ RndTable::~RndTable()
 //  İ’è¥æ“¾ 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-void RndTable::create(const RecordList& list)
+void RndTable::generateTable(const RecordList& list)
 {
 	//ƒŠƒXƒgì¬
 	this->m_list.clear();
