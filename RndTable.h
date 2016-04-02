@@ -11,6 +11,8 @@ protected:
 	int index; //インデックス
 	int last_value;
 	int deleted_index;
+
+	const RecordList*	m_recordlist;
 public:
 	//コンストラクタ・デストラクタ
 	RndTable();

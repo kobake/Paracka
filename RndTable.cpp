@@ -11,6 +11,7 @@ RndTable::RndTable()
 	last_value=-1;
 	deleted_index=-1;
 	m_firstSize = 0;
+	m_recordlist = NULL;
 }
 
 RndTable::~RndTable()
@@ -23,6 +24,7 @@ RndTable::~RndTable()
 
 void RndTable::generateTable(const RecordList& list)
 {
+	m_recordlist = &list;
 	//リスト作成
 	this->m_list.clear();
 	for(int i = 0; i < list.getTotalCount(); i++){
@@ -70,29 +72,34 @@ bool RndTable::exists(int value)
 //rndtable[問題数]={1,3,2,9,4,8,2,...}
 int RndTable::getNext()
 {
-	if(m_list.size() > 0){
-		if(deleted_index>=0 && index>=deleted_index){
-			index=index % getCurrentSize(); // index はそのまま
-		}else{
-			index=(index+1) % getCurrentSize();
-		}
-		deleted_index=-1;
-		//
-		if(index==0){
-			_shuffle();
-			if(m_list[0] == last_value && getCurrentSize() >= 2){ //今の値(list[0])と前の値(last_value)がかぶることを回避
-				int tmp;
-				int i=rand() % (getCurrentSize() - 1) + 1;
-				m_swap(m_list[0], m_list[i], tmp);
-			}
-		}
-		last_value = m_list[index];
-		
-		return m_list[index];
-	}else{
+	if(m_list.size() == 0){
 		last_value=-1;
 		return -1;
 	}
+
+	if(m_recordlist->getFileMode() == L"#!sequence"){
+		index = 0;
+		return m_list[index];
+	}
+
+	if(deleted_index>=0 && index>=deleted_index){
+		index=index % getCurrentSize(); // index はそのまま
+	}else{
+		index=(index+1) % getCurrentSize();
+	}
+	deleted_index=-1;
+
+	if(index==0){
+		_shuffle();
+		if(m_list[0] == last_value && getCurrentSize() >= 2){ //今の値(list[0])と前の値(last_value)がかぶることを回避
+			int tmp;
+			int i=rand() % (getCurrentSize() - 1) + 1;
+			m_swap(m_list[0], m_list[i], tmp);
+		}
+	}
+	last_value = m_list[index];
+		
+	return m_list[index];
 }
 
 

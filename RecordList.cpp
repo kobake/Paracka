@@ -104,6 +104,11 @@ bool RecordList::_read(FileStream *in, const mystring& filepath)
 	int prevMarked = 0;
 	for(int i = 0; i < (int)lines.size(); i++){
 		mystring line = lines[i];
+		// 特別行
+		if(line.startsWith(L"#!")){
+			m_filemode = line;
+		}
+
 		// 空行
 		if(line.length() == 0){
 			m_list.push_back(new CommentRecord(filepath, line));
@@ -125,6 +130,14 @@ bool RecordList::_read(FileStream *in, const mystring& filepath)
 		}
 		// テキスト
 		if(line.length() > 0){
+			if(this->m_filemode == L"#!sequence"){
+				wchar_t buf[256];
+				swprintf(buf, _countof(buf), L"%d/%d 行目", i, lines.size());
+				m_list.push_back(new NormalRecord(filepath, buf, 0));
+				m_list.back()->m_a = line;
+				continue;
+			}
+
 			Record* lastRecord = NULL;
 			if(m_list.size() > 0)lastRecord = m_list.back();
 
@@ -144,6 +157,7 @@ bool RecordList::_read(FileStream *in, const mystring& filepath)
 
 bool RecordList::loadFile(const std::vector<std::wstring>& paths)
 {
+	m_filemode = L"";
 	_listDeleteAll();
 	for(int i = 0; i < (int)paths.size(); i++){
 		FileStream in;
@@ -162,6 +176,9 @@ void RecordList::saveFile()
 		Record& record = *m_list[i];
 		if(fps[record.filepath] == NULL){
 			fps[record.filepath] = _wfopen(record.filepath.c_str(), L"wt");
+		}
+		if(m_filemode != L""){
+			record._writeAsUtf8(fps[record.filepath], L"%ls\n", m_filemode.c_str());
 		}
 		record.addToFile(fps[record.filepath]);
 	}

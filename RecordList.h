@@ -42,10 +42,12 @@ public:
 	bool loadFile(const std::vector<std::wstring>& paths);
 	void saveFile();
 	void dispose();
+	mystring getFileMode() const	{ return m_filemode; }
 private:
 	bool _read(FileStream *in, const mystring& filepath);
 private:
-	myvector<Record*> m_list;
+	mystring			m_filemode;
+	myvector<Record*>	m_list;
 	int ans_flag;
 	//”½“]ƒtƒ‰ƒO
 	int turned;
