@@ -30,15 +30,15 @@ ACCELDEF accdef[]={
 
 int AppRoutine()
 {
-#if 0
-	return app->windowsLoop();
-#else
+	CoInitialize(NULL);
+
 	Accelerator *acc=new Accelerator();
 	acc->setEntries(accdef);
 	int ret=app->dialogLoop(winMain,acc);
 	delete acc;
+
+	CoUninitialize();
 	return ret;
-#endif
 }
 
 int AppError(int code)

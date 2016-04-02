@@ -35,6 +35,10 @@ MainWindow::MainWindow(const wstring& caption,int x,int y,int w,int h,Window *_p
 			L"‰ð“š‚ðŒ©‚é(&L)",			IDM_FUNC_VIEW,		0,
 			L"-",						-1,					0,
 			L"–â‘è‚Æ‰ð“š‚Ì”½“](&T)",	IDM_FUNC_TURN,		KMENU_POPEND,
+		L"‰¹—Ê(&V)",					-1,					KMENU_POPUP,
+			L"Å¬(&L)",				IDM_VOLUME_LOW,		0,
+			L"’†ŠÔ(&M)",				IDM_VOLUME_MIDDLE,	0,
+			L"Å‘å(&H)",				IDM_VOLUME_HIGH,	KMENU_POPEND,
 		L"ÍÙÌß(&H)",					-1,					KMENU_POPUP,
 			L"ÄËß¯¸‚ÌŒŸõ(&H)\tF1",		IDM_HELP_TOPIC,		0,
 			L"-",						-1,					0,
@@ -360,6 +364,9 @@ LRESULT MainWindow::onCommand(UINT msg,WPARAM wParam,LPARAM lParam)
 			turnQesAns();
 		}
 		break;
+	case IDM_VOLUME_LOW: WaveSound::globalVolume(0.2f); break;
+	case IDM_VOLUME_MIDDLE: WaveSound::globalVolume(0.6f); break;
+	case IDM_VOLUME_HIGH: WaveSound::globalVolume(1.0f); break;
 	case IDM_HELP_TOPIC:
 		app->shellOpen(L"Paracka.txt",this);
 		break;
