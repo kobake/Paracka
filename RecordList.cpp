@@ -9,8 +9,6 @@
 RecordList::RecordList()
 {
 	ans_flag=0;
-	//
-	turned=0;
 	this->m_filterLevel = 0;
 }
 
@@ -26,16 +24,6 @@ void RecordList::dispose()
 	}
 	m_list.clear();
 	ans_flag=0;
-//	turned=0;
-}
-
-// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-// –â‘è‚Æ‰ð“š 
-// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-
-void RecordList::turn()
-{
-	turned=(1-turned);
 }
 
 

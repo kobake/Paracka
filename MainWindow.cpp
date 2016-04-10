@@ -1,6 +1,7 @@
 #include "main.h"
 #include "src/CDropFiles.h"
 #include <StringLib.h>
+#include "RecordVisitor.h"
 
 Font font(L"ＭＳ ゴシック",9);
 
@@ -16,6 +17,7 @@ MainWindow::MainWindow(const wstring& caption,int x,int y,int w,int h,Window *_p
 	qnum=0;
 	qindex=0;
 	qstep=0;
+	m_turned = false;
 	Window::setFontOnCreate(font);
 	//ﾒﾆｭｰ
 	MENUDEF menudef[]={
@@ -309,7 +311,8 @@ LRESULT MainWindow::onCommand(UINT msg,WPARAM wParam,LPARAM lParam)
 					if(rndtable.getCurrentSize()>0){
 						//解答チェック
 						wchar_t *p=edtAns[i]->getTextTemp();
-						if(wcscmp(p, m_allList.getTotalAt(qindex).m_a.c_str())==0){
+						bool result = RecordVisitor(m_allList.getTotalAt(qindex), m_turned).checkAnswer(p);
+						if(result){
 							sndOk->play();
 							showGood(i);
 							if(!mark_is_all_good()){
@@ -392,21 +395,21 @@ bool mark_is_all_good()
 void MainWindow::showGood(int a_index)
 {
 	qstep=2;
-	edtQes->setTextF(m_allList.getTotalAt(qindex).getGoodText().c_str());
+	edtQes->setTextF(RecordVisitor(m_allList.getTotalAt(qindex), m_turned).getGoodText().c_str());
 	setButtonEnabled(true);
 }
 
 void MainWindow::showBad()
 {
 	qstep=3;
-	edtQes->setTextF(m_allList.getTotalAt(qindex).getBadText().c_str());
+	edtQes->setTextF(RecordVisitor(m_allList.getTotalAt(qindex), m_turned).getBadText().c_str());
 	setButtonEnabled(true);
 }
 
 void MainWindow::showQes(bool reset_ans)
 {
 	qstep=0;
-	edtQes->setText(m_allList.getTotalAt(qindex).getQuestionText());
+	edtQes->setText(RecordVisitor(m_allList.getTotalAt(qindex), m_turned).getQuestionText());
 	//
 	createAnsEdit(m_allList.getTotalAt(qindex).m_a.size());
 	if(reset_ans){ for(int i=0;i<n_edtAns;i++)edtAns[i]->setText(L""); }
@@ -423,7 +426,7 @@ void MainWindow::showQes(bool reset_ans)
 void MainWindow::showAns(int a_index)
 {
 	qstep=1;
-	edtQes->setTextF(m_allList.getTotalAt(qindex).getQuestionWithAnswerText().c_str());
+	edtQes->setTextF(RecordVisitor(m_allList.getTotalAt(qindex), m_turned).getQuestionWithAnswerText().c_str());
 }
 
 void MainWindow::showCongratulation()
@@ -431,9 +434,6 @@ void MainWindow::showCongratulation()
 	qstep=4;
 	edtQes->setText(L"\r\n ++ ++ 全問クリア！！ ++ ++");
 	for(int i=0;i<n_edtAns;i++)edtAns[i]->setText(L"");
-//	btnEnter->setText(L"添削(Enter)");	mnuMain->setItemTextByID(IDM_FUNC_ENTER,L"添削(&R)");
-//	btnView->setText(L"答えを見る(&L)");	mnuMain->setItemTextByID(IDM_FUNC_VIEW,L"答えを見る(&L)");
-//	setButtonEnabled(false);
 }
 
 void MainWindow::hideAns(int a_index)
@@ -449,7 +449,7 @@ void MainWindow::refreshText()
 		showAns(0); //####引数0は仮
 	}else if(qstep==2){
 		showGood(0); //####引数0は仮
-		edtAns[0]->setText(m_allList.getTotalAt(qindex).m_a); //####引数0は仮
+		edtAns[0]->setText(RecordVisitor(m_allList.getTotalAt(qindex), m_turned).getA());
 	}else if(qstep==4){
 		showCongratulation();
 	}else if(qstep==-1){
@@ -459,8 +459,7 @@ void MainWindow::refreshText()
 
 void MainWindow::turnQesAns()
 {
-	//#####
-	m_allList.turn();
+	m_turned = !m_turned;
 	refreshText();
 }
 
@@ -490,8 +489,6 @@ void MainWindow::showNone()
 	qstep=-1;
 	edtQes->setText(L"\r\n ++ 問題がありません ++");
 	for(int i=0;i<n_edtAns;i++)edtAns[i]->setText(L"");
-//	btnEnter->setText(L"添削(Enter)");	mnuMain->setItemTextByID(IDM_FUNC_ENTER,L"添削(&R)");
-//	btnView->setText(L"答えを見る(&L)");	mnuMain->setItemTextByID(IDM_FUNC_VIEW,L"答えを見る(&L)");
 	setButtonEnabled(false);
 }
 

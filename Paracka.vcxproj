@@ -135,6 +135,7 @@
     <ClInclude Include="main.h" />
     <ClInclude Include="RecordList.h" />
     <ClInclude Include="Record.h" />
+    <ClInclude Include="RecordVisitor.h" />
     <ClInclude Include="RndTable.h" />
     <ClInclude Include="Paracka.h" />
     <ClInclude Include="MainWindow.h" />
@@ -155,6 +156,7 @@
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <ClCompile Include="Record.cpp" />
+    <ClCompile Include="RecordVisitor.cpp" />
     <ClCompile Include="RndTable.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>

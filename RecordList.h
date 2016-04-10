@@ -26,7 +26,6 @@ public:
 		return *m_list[index];
 	}
 
-	void turn();
 	void toggleFilter(){
 		// -1,0,1,2
 		m_filterLevel++;
@@ -49,8 +48,6 @@ private:
 	mystring			m_filemode;
 	myvector<Record*>	m_list;
 	int ans_flag;
-	//反転フラグ
-	int turned;
 	// フィルタリングレベル
 	int m_filterLevel; // 0:全表示 1:★と★★を表示 2:★★のみ表示
 };

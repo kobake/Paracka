@@ -100,6 +100,7 @@ private:
 	int qnum;
 	int qindex;
 	int qstep;
+	bool m_turned;
 };
 
 #include "c_WaveSound.h"
