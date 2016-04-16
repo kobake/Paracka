@@ -2,6 +2,7 @@
 
 #include <vector>
 class RecordList;
+class ClearStates;
 
 class RndTable{
 protected:
@@ -23,11 +24,16 @@ public:
 	int getFirstSize() const	{ return m_firstSize; }
 	void clear(int value); //value‚ğo‘è‘ÎÛ‚©‚çœ‹
 	void clearAll();
-	bool exists(int value);
+	bool exists(int value) const;
 	//g—p
 	int getNext();
 	//“à•”
 	void _create(int _size);
 	void _shuffle();
 	int _delete(int value);
+
+	// ‰ñ“šó‘Ô
+	ClearStates getClearStates(const RecordList& recordList) const;
+	void applyClearStates(const RecordList& recordList, const ClearStates& states);
+
 };

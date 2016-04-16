@@ -2,6 +2,7 @@
 #include "src/CDropFiles.h"
 #include <StringLib.h>
 #include "RecordVisitor.h"
+#include "ClearStates.h"
 
 Font font(L"ＭＳ ゴシック",9);
 
@@ -24,6 +25,7 @@ MainWindow::MainWindow(const wstring& caption,int x,int y,int w,int h,Window *_p
 		L"ファイル(&F)",								-1,							KMENU_POPUP,
 			L"開く(&O)\tCtrl+O",						IDM_FILE_OPEN,				0,
 			L"再読み込み(&R)\tCtrl+R",					IDM_FILE_RELOAD,			0,
+			L"再読み込み＆最初から(&R)\tCtrl+T",		IDM_FILE_RELOAD_RESTART,	0,
 			L"-",										-1,							0,
 			L"終了(&X)\tAlt+F4",						IDM_FILE_QUIT,				KMENU_POPEND,
 		L"機能(&F)",									-1,							KMENU_POPUP,
@@ -190,9 +192,24 @@ LRESULT MainWindow::onNotify(UINT msg,WPARAM wParam,LPARAM lParam)
 	return CustomWindow::onNotify(msg,wParam,lParam);
 }
 
-void MainWindow::fileReload()
+void MainWindow::fileReload(bool restart)
 {
+	ClearStates states;
+	if(!restart){
+		states = this->rndtable.getClearStates(m_allList);
+	}
 	fileLoad(m_paths);
+
+	if(!restart){
+		this->rndtable.applyClearStates(m_allList, states);
+
+		if(rndtable.getCurrentSize()>0){
+			qindex=rndtable.getNext();
+			showQes();
+		}else{
+			showNone();
+		}
+	}
 }
 
 void MainWindow::fileLoad(const std::vector<std::wstring>& paths)
@@ -255,7 +272,10 @@ LRESULT MainWindow::onCommand(UINT msg,WPARAM wParam,LPARAM lParam)
 		}
 		break;
 	case IDM_FILE_RELOAD:
-		fileReload();
+		fileReload(false);
+		break;
+	case IDM_FILE_RELOAD_RESTART:
+		fileReload(true);
 		break;
 	case IDM_FILE_QUIT:
 		close();

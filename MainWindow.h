@@ -72,7 +72,7 @@ public:
 	//
 	void updateCaption();
 	void fileLoad(const std::vector<std::wstring>& paths);
-	void fileReload();
+	void fileReload(bool restart);
 	//
 	const wchar_t *MainWindow::getMarkString();
 private:

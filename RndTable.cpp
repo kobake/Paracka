@@ -1,6 +1,7 @@
 #include "include_com.h"
 #include "RndTable.h"
 #include "RecordList.h"
+#include "ClearStates.h"
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 // コンストラクタ・デストラクタ
@@ -55,7 +56,7 @@ void RndTable::clearAll()
 	last_value=-1;
 	deleted_index=-1;
 }
-bool RndTable::exists(int value)
+bool RndTable::exists(int value) const
 {
 	for(int i=0;i<(int)m_list.size();i++){
 		if(m_list[i]==value)return true;
@@ -130,4 +131,32 @@ int RndTable::_delete(int value)
 		}
 	}
 	return -1;
+}
+
+
+// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
+// 回答状態
+// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
+
+ClearStates RndTable::getClearStates(const RecordList& recordList) const
+{
+	ClearStates states;
+	for(int i = 0; i < recordList.getTotalCount(); i++){
+		const Record& record = recordList.getTotalAt(i);
+		bool cleared = !this->exists(i);
+		states.putClearState(record, cleared);
+	}
+	return states;
+}
+
+void RndTable::applyClearStates(const RecordList& recordList, const ClearStates& states)
+{
+	for(int i = 0; i < recordList.getTotalCount(); i++){
+		const Record& record = recordList.getTotalAt(i);
+		bool cleared = states.getClearState(record);
+		if(cleared){
+			this->clear(i);
+			this->getNext();
+		}
+	}
 }

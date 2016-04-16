@@ -25,9 +25,6 @@
     <ClInclude Include="main.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="RndTable.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="Paracka.h">
       <Filter>Source Files\App</Filter>
     </ClInclude>
@@ -43,12 +40,15 @@
     <ClInclude Include="RecordVisitor.h">
       <Filter>Source Files\Data</Filter>
     </ClInclude>
+    <ClInclude Include="ClearStates.h">
+      <Filter>Source Files\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="RndTable.h">
+      <Filter>Source Files\Data</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="RndTable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Paracka.cpp">
@@ -64,6 +64,12 @@
       <Filter>Source Files\Data</Filter>
     </ClCompile>
     <ClCompile Include="RecordVisitor.cpp">
+      <Filter>Source Files\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="ClearStates.cpp">
+      <Filter>Source Files\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="RndTable.cpp">
       <Filter>Source Files\Data</Filter>
     </ClCompile>
   </ItemGroup>

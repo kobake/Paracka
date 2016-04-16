@@ -1,8 +1,8 @@
 #pragma once
 
 #include <StringLib.h>
-
 #include "Record.h"
+class ClearStates;
 
 class RecordList{
 public:

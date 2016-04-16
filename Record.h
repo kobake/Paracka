@@ -3,7 +3,7 @@
 #include <StringLib.h>
 class RecordList;
 
-struct Record{
+class Record{
 public:
 	mystring			filepath;
 	int					m_markingLevel;
