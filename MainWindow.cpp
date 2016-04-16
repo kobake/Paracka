@@ -531,19 +531,7 @@ void MainWindow::updateCaption()
 	}
 
 	// フィルタリングモード
-	mystring mode = L"";
-	if(m_allList.getFilterLevel() > 0){
-		for(int i = 0; i < m_allList.getFilterLevel(); i++){
-			mode += L"★";
-		}
-		mode +=  L"以上";
-	}
-	else if(m_allList.getFilterLevel() == -1){
-		mode = L"簡単のみ";
-	}
-	else{
-		mode = L"全表示";
-	}
+	mystring mode = m_allList.getFilterLevelString();
 
 	// キャプション設定
 	setTextF(L"%ls (残り %02d/%02d) (%ls) - Paracka",
