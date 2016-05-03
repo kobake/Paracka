@@ -3,6 +3,9 @@
 #include <StringLib.h>
 #include "Record.h"
 
+// ユーティリティ
+mystring trimPartMark(mystring text);
+
 class RecordVisitor{
 private:
 	const Record* m_record;
@@ -23,11 +26,10 @@ public:
 	{
 		return !m_turned ? m_record->m_a : m_record->m_q;
 	}
+
 	// チェック
-	bool checkAnswer(mystring ans) const
-	{
-		return ans == getA();
-	}
+	bool checkAnswer(mystring ans) const;
+	
 	// 表示文字列
 	mystring getQuestionText() const
 	{
