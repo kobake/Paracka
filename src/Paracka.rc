@@ -1,0 +1,8 @@
+#include <windows.h>
+#include "id/res.h"
+#include "id.h"
+
+ICO_MAIN	ICON	DISCARDABLE	"../res/main.ico"
+WAVE_OK		WAVE	DISCARDABLE	"../res/ok.wav"
+WAVE_NG		WAVE	DISCARDABLE	"../res/ng.wav"
+WAVE_CLEAR	WAVE	DISCARDABLE	"../res/clear.wav"

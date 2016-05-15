@@ -10,75 +10,71 @@
     <Filter Include="Source Files\Window">
       <UniqueIdentifier>{ea3f898c-4a47-479c-826b-7cd3b5e36132}</UniqueIdentifier>
     </Filter>
-    <Filter Include="New Files">
-      <UniqueIdentifier>{5c50b23e-3731-47bf-9b66-2deec9a3d0a7}</UniqueIdentifier>
-      <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat;h;hpp;hxx;hm;inl</Extensions>
-    </Filter>
     <Filter Include="Source Files\Data">
       <UniqueIdentifier>{405bc02a-cb39-4878-8f06-9b839dbb29fb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="id.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="main.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Paracka.h">
+    <ClInclude Include="src\Paracka.h">
       <Filter>Source Files\App</Filter>
     </ClInclude>
-    <ClInclude Include="MainWindow.h">
+    <ClInclude Include="src\MainWindow.h">
       <Filter>Source Files\Window</Filter>
     </ClInclude>
-    <ClInclude Include="Record.h">
+    <ClInclude Include="src\id.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\RndTable.h">
       <Filter>Source Files\Data</Filter>
     </ClInclude>
-    <ClInclude Include="RecordList.h">
+    <ClInclude Include="src\Record.h">
       <Filter>Source Files\Data</Filter>
     </ClInclude>
-    <ClInclude Include="RecordVisitor.h">
+    <ClInclude Include="src\RecordList.h">
       <Filter>Source Files\Data</Filter>
     </ClInclude>
-    <ClInclude Include="ClearStates.h">
+    <ClInclude Include="src\RecordVisitor.h">
       <Filter>Source Files\Data</Filter>
     </ClInclude>
-    <ClInclude Include="RndTable.h">
+    <ClInclude Include="src\ClearStates.h">
       <Filter>Source Files\Data</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Paracka.cpp">
+    <ClCompile Include="src\Paracka.cpp">
       <Filter>Source Files\App</Filter>
     </ClCompile>
-    <ClCompile Include="MainWindow.cpp">
+    <ClCompile Include="src\MainWindow.cpp">
       <Filter>Source Files\Window</Filter>
     </ClCompile>
-    <ClCompile Include="Record.cpp">
+    <ClCompile Include="src\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Record.cpp">
       <Filter>Source Files\Data</Filter>
     </ClCompile>
-    <ClCompile Include="RecordList.cpp">
+    <ClCompile Include="src\RecordList.cpp">
       <Filter>Source Files\Data</Filter>
     </ClCompile>
-    <ClCompile Include="RecordVisitor.cpp">
+    <ClCompile Include="src\RecordVisitor.cpp">
       <Filter>Source Files\Data</Filter>
     </ClCompile>
-    <ClCompile Include="ClearStates.cpp">
+    <ClCompile Include="src\RndTable.cpp">
       <Filter>Source Files\Data</Filter>
     </ClCompile>
-    <ClCompile Include="RndTable.cpp">
+    <ClCompile Include="src\ClearStates.cpp">
       <Filter>Source Files\Data</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Paracka.rc">
+    <None Include="res\main.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="src\Paracka.rc">
       <Filter>Source Files</Filter>
     </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="main.ico" />
   </ItemGroup>
 </Project>
