@@ -57,7 +57,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>C:\boost_1_55_0;C:\sites\commonlib\src;C:\sites\~Lib\c2lib;C:\sites\~Lib\DbLib;C:\sites\~Lib\DebugLib;C:\sites\~Lib\GraphicsLib;C:\sites\~Lib\IoLib;C:\sites\~Lib\LayoutLib;C:\sites\~Lib\LogLib;C:\sites\~Lib\MathLib;C:\sites\~Lib\MemoryLib;C:\sites\~Lib\NetworkLib;C:\sites\~Lib\StringLib;C:\sites\~Lib\TestLib;C:\sites\~Lib\ThreadLib;C:\sites\~Lib\WinSystemLib;C:\sites\~Lib\XmlLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\boost_1_55_0;../KppOldLib/src;../KppLibs/BaseLib;../KppLibs/DbLib;../KppLibs/DebugLib;../KppLibs/GraphicsLib;../KppLibs/IoLib;../KppLibs/LayoutLib;../KppLibs/LogLib;../KppLibs/MathLib;../KppLibs/MemoryLib;../KppLibs/NetworkLib;../KppLibs/StringLib;../KppLibs/TestLib;../KppLibs/ThreadLib;../KppLibs/WinSystemLib;../KppLibs/XmlLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;WINVER=0x0501;_WIN32_WINNT=0x0501;WIN32_LEAN_AND_MEAN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -74,7 +74,7 @@
     <ResourceCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0411</Culture>
-      <AdditionalIncludeDirectories>C:\sites\~Lib\c2lib</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\sites\KppLibs\BaseLib</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>WSOCK32.LIB;WININET.LIB;WINMM.LIB;COMCTL32.LIB;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -100,7 +100,7 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-      <AdditionalIncludeDirectories>C:\boost_1_55_0;C:\sites\commonlib\src;C:\sites\~Lib\c2lib;C:\sites\~Lib\DbLib;C:\sites\~Lib\DebugLib;C:\sites\~Lib\GraphicsLib;C:\sites\~Lib\IoLib;C:\sites\~Lib\LayoutLib;C:\sites\~Lib\LogLib;C:\sites\~Lib\MathLib;C:\sites\~Lib\MemoryLib;C:\sites\~Lib\NetworkLib;C:\sites\~Lib\StringLib;C:\sites\~Lib\TestLib;C:\sites\~Lib\ThreadLib;C:\sites\~Lib\WinSystemLib;C:\sites\~Lib\XmlLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\boost_1_55_0;../KppOldLib/src;../KppLibs/BaseLib;../KppLibs/DbLib;../KppLibs/DebugLib;../KppLibs/GraphicsLib;../KppLibs/IoLib;../KppLibs/LayoutLib;../KppLibs/LogLib;../KppLibs/MathLib;../KppLibs/MemoryLib;../KppLibs/NetworkLib;../KppLibs/StringLib;../KppLibs/TestLib;../KppLibs/ThreadLib;../KppLibs/WinSystemLib;../KppLibs/XmlLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
@@ -117,7 +117,7 @@
     <ResourceCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0411</Culture>
-      <AdditionalIncludeDirectories>C:\sites\~Lib\c2lib</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\sites\KppLibs\BaseLib</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>WSOCK32.LIB;WININET.LIB;WINMM.LIB;COMCTL32.LIB;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -188,22 +188,22 @@
     <None Include="main.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\commonlib\commonlib.vcxproj">
+    <ProjectReference Include="..\KppOldLib\KppOldLib.vcxproj">
       <Project>{72c7bd39-4973-4026-9d47-4dd95e76a544}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\~Lib\c2lib\_workspace\c2lib.vcxproj">
+    <ProjectReference Include="..\KppLibs\BaseLib\_workspace\BaseLib.vcxproj">
       <Project>{bfad9e9a-f51c-4498-86ed-6ca20031d699}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\~Lib\GraphicsLib\GraphicsLib.vcxproj">
+    <ProjectReference Include="..\KppLibs\GraphicsLib\GraphicsLib.vcxproj">
       <Project>{9d2edb24-85d5-4979-83e2-f8b1176e83bf}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\~Lib\IoLib\IoLib.vcxproj">
+    <ProjectReference Include="..\KppLibs\IoLib\IoLib.vcxproj">
       <Project>{bb458969-5ac9-4f24-8ec0-e0440ccfda70}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\~Lib\StringLib\StringLib.vcxproj">
+    <ProjectReference Include="..\KppLibs\StringLib\StringLib.vcxproj">
       <Project>{287ecc83-7837-4e07-b62f-73bdf10b6341}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\~Lib\WinSystemLib\WinSystemLib.vcxproj">
+    <ProjectReference Include="..\KppLibs\WinSystemLib\WinSystemLib.vcxproj">
       <Project>{4ee1cfb9-db66-4e57-b0a4-4c567fa1962a}</Project>
     </ProjectReference>
   </ItemGroup>
