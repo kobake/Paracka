@@ -1,6 +1,6 @@
 #pragma once
 
-#include "id/menu.h"
+#include "src/id/menu.h"
 
 #define ICO_MAIN	100
 #define WAVE_OK		101

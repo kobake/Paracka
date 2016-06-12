@@ -1,4 +1,5 @@
-#include "include_com.h"
+#include <BaseLib.h>
+#include <BaseLibCom.h>
 #include "RndTable.h"
 #include "RecordList.h"
 #include "ClearStates.h"

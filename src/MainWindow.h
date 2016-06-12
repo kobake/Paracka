@@ -1,9 +1,8 @@
+#pragma once
+
 class MainWindow;
 
-#ifndef _MainWindow_
-#define _MainWindow_
-
-#include "c_CustomWindow.h"
+#include <WinSystemLib.h> // c_CustomWindow
 
 #include "RecordList.h"
 #include "RndTable.h"
@@ -77,7 +76,7 @@ public:
 	const wchar_t *MainWindow::getMarkString();
 private:
 	//ÒÆ­°
-	Menu *mnuMain;
+	OldMenu *mnuMain;
 
 	//ºÝÄÛ°Ù
 	EditBox *edtQes;
@@ -103,6 +102,3 @@ private:
 	bool m_turned;
 };
 
-#include "c_WaveSound.h"
-
-#endif

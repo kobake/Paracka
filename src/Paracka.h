@@ -1,6 +1,6 @@
 #pragma once
 
-#include "c_App.h"
+#include <WinSystemLib.h>
 
 #define app ((Paracka*)app)
 
