@@ -59,7 +59,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>C:\boost_1_55_0;../KppOldLib/src;../KppLibs/BaseLib;../KppLibs/KppSound;../KppLibs/DbLib;../KppLibs/DebugLib;../KppLibs/GraphicsLib;../KppLibs/IoLib;../KppLibs/LayoutLib;../KppLibs/LogLib;../KppLibs/MathLib;../KppLibs/MemoryLib;../KppLibs/NetworkLib;../KppLibs/StringLib;../KppLibs/TestLib;../KppLibs/ThreadLib;../KppLibs/WinSystemLib;../KppLibs/XmlLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\boost_1_61_0;../KppOldLib/src;../KppLibs/BaseLib;../KppLibs/KppSound;../KppLibs/DbLib;../KppLibs/DebugLib;../KppLibs/GraphicsLib;../KppLibs/IoLib;../KppLibs/LayoutLib;../KppLibs/LogLib;../KppLibs/MathLib;../KppLibs/MemoryLib;../KppLibs/NetworkLib;../KppLibs/StringLib;../KppLibs/TestLib;../KppLibs/ThreadLib;../KppLibs/WinSystemLib;../KppLibs/XmlLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;WINVER=0x0501;_WIN32_WINNT=0x0501;WIN32_LEAN_AND_MEAN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -86,7 +86,7 @@
       <ProgramDatabaseFile>.\Debug/Paracka.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalLibraryDirectories>C:\boost_1_55_0\libs\regex\build\stage</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\boost_1_61_0\stage\lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -102,7 +102,7 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-      <AdditionalIncludeDirectories>C:\boost_1_55_0;../KppOldLib/src;../KppLibs/BaseLib;../KppLibs/KppSound;../KppLibs/DbLib;../KppLibs/DebugLib;../KppLibs/GraphicsLib;../KppLibs/IoLib;../KppLibs/LayoutLib;../KppLibs/LogLib;../KppLibs/MathLib;../KppLibs/MemoryLib;../KppLibs/NetworkLib;../KppLibs/StringLib;../KppLibs/TestLib;../KppLibs/ThreadLib;../KppLibs/WinSystemLib;../KppLibs/XmlLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\boost_1_61_0;../KppOldLib/src;../KppLibs/BaseLib;../KppLibs/KppSound;../KppLibs/DbLib;../KppLibs/DebugLib;../KppLibs/GraphicsLib;../KppLibs/IoLib;../KppLibs/LayoutLib;../KppLibs/LogLib;../KppLibs/MathLib;../KppLibs/MemoryLib;../KppLibs/NetworkLib;../KppLibs/StringLib;../KppLibs/TestLib;../KppLibs/ThreadLib;../KppLibs/WinSystemLib;../KppLibs/XmlLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
@@ -129,7 +129,7 @@
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
       <AdditionalOptions>/LTCG %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalLibraryDirectories>C:\boost_1_55_0\libs\regex\build\stage</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\boost_1_61_0\stage\lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
