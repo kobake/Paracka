@@ -2,3 +2,6 @@ Debug
 Release
 *.aps
 *.user
+
+*.VC.db
+*.VC.VC.opendb
