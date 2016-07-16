@@ -2,8 +2,6 @@
 
 #include <WinSystemLib.h>
 
-#define app ((Paracka*)app)
-
 //class FileSelectDialog;
 #include "WinSystemLib.h"
 #include "src/dlg/FileDialog.h"

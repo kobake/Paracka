@@ -57,7 +57,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>C:\boost_1_55_0;../KppOldLib/src;../KppLibs/BaseLib;../KppLibs/DbLib;../KppLibs/DebugLib;../KppLibs/GraphicsLib;../KppLibs/IoLib;../KppLibs/LayoutLib;../KppLibs/LogLib;../KppLibs/MathLib;../KppLibs/MemoryLib;../KppLibs/NetworkLib;../KppLibs/StringLib;../KppLibs/TestLib;../KppLibs/ThreadLib;../KppLibs/WinSystemLib;../KppLibs/XmlLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\boost_1_55_0;../KppOldLib/src;../KppLibs/BaseLib;../KppLibs/KppSound;../KppLibs/DbLib;../KppLibs/DebugLib;../KppLibs/GraphicsLib;../KppLibs/IoLib;../KppLibs/LayoutLib;../KppLibs/LogLib;../KppLibs/MathLib;../KppLibs/MemoryLib;../KppLibs/NetworkLib;../KppLibs/StringLib;../KppLibs/TestLib;../KppLibs/ThreadLib;../KppLibs/WinSystemLib;../KppLibs/XmlLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;WINVER=0x0501;_WIN32_WINNT=0x0501;WIN32_LEAN_AND_MEAN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -100,7 +100,7 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-      <AdditionalIncludeDirectories>C:\boost_1_55_0;../KppOldLib/src;../KppLibs/BaseLib;../KppLibs/DbLib;../KppLibs/DebugLib;../KppLibs/GraphicsLib;../KppLibs/IoLib;../KppLibs/LayoutLib;../KppLibs/LogLib;../KppLibs/MathLib;../KppLibs/MemoryLib;../KppLibs/NetworkLib;../KppLibs/StringLib;../KppLibs/TestLib;../KppLibs/ThreadLib;../KppLibs/WinSystemLib;../KppLibs/XmlLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\boost_1_55_0;../KppOldLib/src;../KppLibs/BaseLib;../KppLibs/KppSound;../KppLibs/DbLib;../KppLibs/DebugLib;../KppLibs/GraphicsLib;../KppLibs/IoLib;../KppLibs/LayoutLib;../KppLibs/LogLib;../KppLibs/MathLib;../KppLibs/MemoryLib;../KppLibs/NetworkLib;../KppLibs/StringLib;../KppLibs/TestLib;../KppLibs/ThreadLib;../KppLibs/WinSystemLib;../KppLibs/XmlLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
@@ -155,11 +155,14 @@
     <ResourceCompile Include="src\Paracka.rc" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\KppLibs\BaseLib\BaseLib.vcxproj">
+      <Project>{bfad9e9a-f51c-4498-86ed-6ca20031d699}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\KppLibs\KppSound\KppSound.vcxproj">
+      <Project>{225dd68b-5218-44fd-9c4e-83c1953fa191}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\KppOldLib\KppOldLib.vcxproj">
       <Project>{72c7bd39-4973-4026-9d47-4dd95e76a544}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\KppLibs\BaseLib\_workspace\BaseLib.vcxproj">
-      <Project>{bfad9e9a-f51c-4498-86ed-6ca20031d699}</Project>
     </ProjectReference>
     <ProjectReference Include="..\KppLibs\GraphicsLib\GraphicsLib.vcxproj">
       <Project>{9d2edb24-85d5-4979-83e2-f8b1176e83bf}</Project>

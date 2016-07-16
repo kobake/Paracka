@@ -1,5 +1,5 @@
 #include <windows.h>
-#include "id/res.h"
+#include <BaseLibRes.h>
 #include "id.h"
 
 ICO_MAIN	ICON	DISCARDABLE	"../res/main.ico"

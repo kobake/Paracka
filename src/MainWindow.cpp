@@ -1,8 +1,11 @@
+#include "MainWindow.h"
 #include "main.h"
 #include "src/CDropFiles.h"
 #include <StringLib.h>
 #include "RecordVisitor.h"
 #include "ClearStates.h"
+#include <GraphicsLib.h>
+#include <KppSound.h>
 
 Font font(L"ＭＳ ゴシック",9);
 
@@ -60,19 +63,19 @@ MainWindow::MainWindow(const wstring& caption,int x,int y,int w,int h,Window *_p
 //	btnEnter=new Button(L"添削(Enter)",0,0,0,0,this,BUTTONF_KIND_DEFAULTBUTTON,IDM_FUNC_ENTER);
 	//ｻｳﾝﾄﾞ
 	sndOk=new WaveSound();
-	sndOk->loadResource(app,WAVE_OK);
+	sndOk->loadResource(g_app,WAVE_OK);
 	sndNg=new WaveSound();
-	sndNg->loadResource(app,WAVE_NG);
+	sndNg->loadResource(g_app,WAVE_NG);
 	sndClear=new WaveSound();
-	sndClear->loadResource(app,WAVE_CLEAR);
+	sndClear->loadResource(g_app,WAVE_CLEAR);
 	//
 	messageNotify(true);
 	//
 	showNone();
 	//
-	if(wcscmp(app->fs->GetPath().GetTitle(),L"...")!=0){
+	if(wcscmp(static_cast<Paracka*>(g_app)->fs->GetPath().GetTitle(),L"...")!=0){
 		std::vector<std::wstring> paths;
-		paths.push_back(app->fs->GetPath().GetFullPath());
+		paths.push_back(static_cast<Paracka*>(g_app)->fs->GetPath().GetFullPath());
 		fileLoad(paths);
 	}
 	dragAcceptFiles(true);
@@ -108,7 +111,7 @@ LRESULT MainWindow::onActivate(UINT msg,WPARAM wParam,LPARAM lParam)
 
 LRESULT MainWindow::onDestroy(UINT msg,WPARAM wParam,LPARAM lParam)
 {
-	app->postQuit();
+	g_app->postQuit();
 	return 0L;
 }
 
@@ -244,14 +247,14 @@ LRESULT MainWindow::onDropFiles(UINT msg,WPARAM wParam,LPARAM lParam)
 	CDropFiles drop((HDROP)wParam);
 	if(drop.size()>0){
 		// パス設定 //
-		app->fs->GetPath().SetFullPath(drop.GetPath(0));
+		static_cast<Paracka*>(g_app)->fs->GetPath().SetFullPath(drop.GetPath(0));
 		// パスリスト構築 //
 		std::vector<std::wstring> paths;
 		for(int i = 0; i < (int)drop.size(); i++){
 			paths.push_back(drop.GetPath(i));
 		}
 		// ロード //
-		//fileLoad(app->fs->GetPath().GetFullPath());
+		//fileLoad(static_cast<Paracka*>(g_app)->fs->GetPath().GetFullPath());
 		fileLoad(paths);
 	}
 	drop.finish();
@@ -265,9 +268,9 @@ LRESULT MainWindow::onCommand(UINT msg,WPARAM wParam,LPARAM lParam)
 	int cmd_notify=HIWORD(wParam);
 	if(cmd_notify==0 || cmd_notify==1)switch(cmd_id){
 	case IDM_FILE_OPEN:
-		if(app->fs->showOpen(L"開く",this->getHWND())){
+		if(static_cast<Paracka*>(g_app)->fs->showOpen(L"開く",this->getHWND())){
 			std::vector<std::wstring> paths;
-			paths.push_back(app->fs->GetPath().GetFullPath());
+			paths.push_back(static_cast<Paracka*>(g_app)->fs->GetPath().GetFullPath());
 			fileLoad(paths);
 		}
 		break;
@@ -391,10 +394,10 @@ LRESULT MainWindow::onCommand(UINT msg,WPARAM wParam,LPARAM lParam)
 	case IDM_VOLUME_MIDDLE: WaveSound::globalVolume(0.6f); break;
 	case IDM_VOLUME_HIGH: WaveSound::globalVolume(1.0f); break;
 	case IDM_HELP_TOPIC:
-		app->shellOpen(L"Paracka.txt",this);
+		g_app->shellOpen(L"Paracka.txt",this);
 		break;
 	case IDM_HELP_VER:
-		app->showVersion(this);
+		g_app->showVersion(this);
 		break;
 	}
 	return 0L;

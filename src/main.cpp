@@ -12,9 +12,9 @@ MainWindow *winMain;
 int AppInit(int argc,const wchar_t* argv[],int nCmdShow)
 {
 	if(argc>=2){
-		app->fs->GetPath().SetFullPath(argv[1]);
+		static_cast<Paracka*>(g_app)->fs->GetPath().SetFullPath(argv[1]);
 	}
-	winMain=new MainWindow(app->getSoftName(),-1,-1,500,200,NULL);
+	winMain=new MainWindow(g_app->getSoftName(),-1,-1,500,200,NULL);
 	winMain->show(nCmdShow);
 	return 0;
 }
@@ -35,7 +35,7 @@ int AppRoutine()
 
 	Accelerator *acc=new Accelerator();
 	acc->setEntries(accdef);
-	int ret=app->dialogLoop(winMain,acc);
+	int ret=g_app->dialogLoop(winMain,acc);
 	delete acc;
 
 	CoUninitialize();
@@ -45,7 +45,7 @@ int AppRoutine()
 int AppError(int code)
 {
 	if(code==KERR_ANY){
-		screen->messageBox(app->getErrorMessage());
+		screen->messageBox(g_app->getErrorMessage());
 	}
 	return 0;
 }
