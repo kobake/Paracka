@@ -1,176 +1,213 @@
-#include <BaseLibCom.h>
+Ôªø#include <BaseLibCom.h>
 #include "RecordList.h"
 #include <StringLib.h>
 #include <algorithm>
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-// ÉRÉìÉXÉgÉâÉNÉ^ÅEÉfÉXÉgÉâÉNÉ^
+// „Ç≥„É≥„Çπ„Éà„É©„ÇØ„Çø„Éª„Éá„Çπ„Éà„É©„ÇØ„Çø
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 RecordList::RecordList()
 {
-	ans_flag=0;
-	this->m_filterLevel = 0;
+    ans_flag=0;
+    this->m_filterLevel = 0;
 }
 
 RecordList::~RecordList()
 {
-	dispose();
+    dispose();
 }
 
 void RecordList::dispose()
 {
-	for(int i = 0; i < (int)m_list.size(); i++){
-		delete m_list[i];
-	}
-	m_list.clear();
-	ans_flag=0;
+    for(int i = 0; i < (int)m_list.size(); i++){
+        delete m_list[i];
+    }
+    m_list.clear();
+    ans_flag=0;
 }
 
 
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-// É|ÉCÉìÉ^ÉäÉXÉg
+// „Éù„Ç§„É≥„Çø„É™„Çπ„Éà
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 void RecordList::_listDeleteAll()
 {
-	dispose();
+    dispose();
 }
 
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-// ÉtÉ@ÉCÉãì¸èoóÕ 
+// „Éï„Ç°„Ç§„É´ÂÖ•Âá∫Âäõ 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 bool RecordList::_read(FileStream *in, const mystring& filepath)
 {
-	// _listDeleteAll();
-	//ëSÉeÉLÉXÉgì«Ç›çûÇ› Å® textbuf
-	long nbuf=in->getLength();
-	std::vector<char> textbuf(nbuf+1);
-	nbuf=in->read(&textbuf[0],nbuf);
-	textbuf[nbuf]='\0';
+    // _listDeleteAll();
+    //ÂÖ®„ÉÜ„Ç≠„Çπ„ÉàË™≠„ÅøËæº„Åø ‚Üí textbuf
+    long nbuf=in->getLength();
+    std::vector<char> textbuf(nbuf+1);
+    nbuf=in->read(&textbuf[0],nbuf);
+    textbuf[nbuf]='\0';
 
-	// ÉGÉìÉRÅ[ÉfÉBÉìÉOïœä∑: UTF-8 char[] -> wchar_t[]
-	int wbuflen = ::MultiByteToWideChar(CP_UTF8, 0, &textbuf[0], nbuf, NULL, 0);
-	std::vector<wchar_t> wbuf(wbuflen + 1);
-	wbuflen = ::MultiByteToWideChar(CP_UTF8, 0, &textbuf[0], nbuf, &wbuf[0], wbuflen);
-	wbuf[wbuflen] = 0;
+    // „Ç®„É≥„Ç≥„Éº„Éá„Ç£„É≥„Ç∞Â§âÊèõ: UTF-8 char[] -> wchar_t[]
+    int wbuflen = ::MultiByteToWideChar(CP_UTF8, 0, &textbuf[0], nbuf, NULL, 0);
+    std::vector<wchar_t> wbuf(wbuflen + 1);
+    wbuflen = ::MultiByteToWideChar(CP_UTF8, 0, &textbuf[0], nbuf, &wbuf[0], wbuflen);
+    wbuf[wbuflen] = 0;
 
-	// \rÇÕéÊÇËèúÇ≠
-	::wcsreplace(&wbuf[0], L"\r", L"");
+    // \r„ÅØÂèñ„ÇäÈô§„Åè
+    ::wcsreplace(&wbuf[0], L"\r", L"");
 
-	// çsÉäÉXÉgÇ…ïœä∑
-	std::vector<mystring> lines;
-	{
-		const wchar_t* p = &wbuf[0];
-		const wchar_t* start = p;
-		const wchar_t* end = p;
-		while(1){
-			if(*p == L'\n' || *p == L'\0'){
-				const wchar_t* end = p;
-				mystring line(start, p);
-				lines.push_back(line);
-				if(*p == L'\0')break;
-				p++;
-				start = p;
-			}
-			else{
-				p++;
-			}
-		}
-	}
+    // Ë°å„É™„Çπ„Éà„Å´Â§âÊèõ
+    std::vector<mystring> lines;
+    {
+        const wchar_t* p = &wbuf[0];
+        const wchar_t* start = p;
+        const wchar_t* end = p;
+        while(1){
+            if(*p == L'\n' || *p == L'\0'){
+                const wchar_t* end = p;
+                mystring line(start, p);
+                lines.push_back(line);
+                if(*p == L'\0')break;
+                p++;
+                start = p;
+            }
+            else{
+                p++;
+            }
+        }
+    }
 
-	// ç≈å„ÇÃòAë±â¸çsÇÕ1Ç¬Ç…Ç‹Ç∆ÇﬂÇÈ
-	{
-		int cnt = (int)lines.size();
-		while(cnt > 0 && lines[cnt - 1] == L"")cnt--;
-		lines.resize(cnt);
-	}
+    // ÊúÄÂæå„ÅÆÈÄ£Á∂öÊîπË°å„ÅØ1„Å§„Å´„Åæ„Å®„ÇÅ„Çã
+    {
+        int cnt = (int)lines.size();
+        while(cnt > 0 && lines[cnt - 1] == L"")cnt--;
+        lines.resize(cnt);
+    }
 
-	// ì«Ç›éÊÇË
-	int prevMarked = 0;
-	for(int i = 0; i < (int)lines.size(); i++){
-		mystring line = lines[i];
-		// ì¡ï çs
-		if(line.startsWith(L"#!")){
-			m_filemode = line;
-		}
+    // Ë™≠„ÅøÂèñ„Çä
+    int prevMarked = 0;
+    for(int i = 0; i < (int)lines.size(); i++){
+        mystring line = lines[i];
+        // ÁâπÂà•Ë°å
+        if(line.startsWith(L"#!")){
+            m_filemode = line;
+        }
 
-		// ãÛçs
-		if(line.length() == 0){
-			m_list.push_back(new CommentRecord(filepath, line));
-			continue;
-		}
-		// É}Å[ÉLÉìÉOåüèo
-		if(line == L"# Åö"){
-			prevMarked = 1;
-			continue;
-		}
-		if(line == L"# ÅöÅö"){
-			prevMarked = 2;
-			continue;
-		}
-		// ÉRÉÅÉìÉgåüèo
-		if(line.startsWith(L"//") || line.startsWith(L"#")){
-			m_list.push_back(new CommentRecord(filepath, line));
-			continue;
-		}
-		// ÉeÉLÉXÉg
-		if(line.length() > 0){
-			if(this->m_filemode == L"#!sequence"){
-				wchar_t buf[256];
-				swprintf(buf, _countof(buf), L"%d/%d çsñ⁄", i, lines.size());
-				m_list.push_back(new NormalRecord(filepath, buf, 0));
-				m_list.back()->m_a = line;
-				continue;
-			}
+        // Á©∫Ë°å
+        if(line.length() == 0){
+            m_list.push_back(new CommentRecord(filepath, line));
+            continue;
+        }
+        // „Éû„Éº„Ç≠„É≥„Ç∞Ê§úÂá∫
+        if(line == L"# ‚òÖ"){
+            prevMarked = 1;
+            continue;
+        }
+        if(line == L"# ‚òÖ‚òÖ"){
+            prevMarked = 2;
+            continue;
+        }
+        // „Ç≥„É°„É≥„ÉàÊ§úÂá∫
+        if(line.startsWith(L"//") || line.startsWith(L"#")){
+            m_list.push_back(new CommentRecord(filepath, line));
+            continue;
+        }
+        // „ÉÜ„Ç≠„Çπ„Éà
+        if(line.length() > 0){
+            _readLine(line, prevMarked, filepath, i);
+            prevMarked = 0;
+            continue;
+        }
+    }
+    
+    return true;
+}
 
-			Record* lastRecord = NULL;
-			if(m_list.size() > 0)lastRecord = m_list.back();
+void RecordList::_readLine(const mystring& line, int prevMarked, const mystring& filepath, int lineNumber)
+{
+    mystring token = L"";
+    const wchar_t* p = line.c_str();
+    while (1) {
+        while (*p == L'\t') p++;
+        const wchar_t* t = wcschr(p, '\t');
+        if (t) {
+            mystring token(p, t);
+            if (token.length() >= 1) {
+                // „Ç≥„É°„É≥„Éà„Çπ„Ç≠„ÉÉ„Éó
+                if (token.startsWith(L"//") || token.startsWith(L"#")) {
+                    return;
+                }
 
-			if(lastRecord && lastRecord->isNormal() && lastRecord->m_a.length() == 0){
-				lastRecord->m_a = line;
-			}
-			else{
-				m_list.push_back(new NormalRecord(filepath, line, prevMarked));
-			}
-			prevMarked = 0;
-			continue;
-		}
-	}
-	
-	return true;
+                // „Éà„Éº„ÇØ„É≥Ëß£Èáà
+                _readToken(token, prevMarked, filepath, lineNumber);
+            }
+            else{
+                return;
+            }
+            p = t;
+        }
+        else {
+            _readToken(p, prevMarked, filepath, lineNumber);
+            return;
+        }
+    }
+}
+
+void RecordList::_readToken(const mystring& token, int prevMarked, const mystring& filepath, int lineNumber)
+{
+    if (this->m_filemode == L"#!sequence") {
+        wchar_t buf[256];
+        swprintf(buf, _countof(buf), L"%d/%d Ë°åÁõÆ", lineNumber, token.size());
+        m_list.push_back(new NormalRecord(filepath, buf, 0));
+        m_list.back()->m_a = token;
+        return;
+    }
+
+    Record* lastRecord = NULL;
+    if (m_list.size() > 0)lastRecord = m_list.back();
+
+    if (lastRecord && lastRecord->isNormal() && lastRecord->m_a.length() == 0) {
+        lastRecord->m_a = token;
+    }
+    else {
+        m_list.push_back(new NormalRecord(filepath, token, prevMarked));
+    }
+    
+
 }
 
 bool RecordList::loadFile(const std::vector<std::wstring>& paths)
 {
-	m_filemode = L"";
-	_listDeleteAll();
-	for(int i = 0; i < (int)paths.size(); i++){
-		FileStream in;
-		if(!in.open(paths[i].c_str(), L"rt"))return false;
-		bool ret = _read(&in, paths[i]);
-		in.close();
-		if(!ret)return false;
-	}
-	return true;
+    m_filemode = L"";
+    _listDeleteAll();
+    for(int i = 0; i < (int)paths.size(); i++){
+        FileStream in;
+        if(!in.open(paths[i].c_str(), L"rt"))return false;
+        bool ret = _read(&in, paths[i]);
+        in.close();
+        if(!ret)return false;
+    }
+    return true;
 }
 
 void RecordList::saveFile()
 {
-	std::map<std::wstring, FILE*> fps;
-	for(int i = 0; i < (int)this->m_list.size(); i++){
-		Record& record = *m_list[i];
-		if(fps[record.filepath] == NULL){
-			fps[record.filepath] = _wfopen(record.filepath.c_str(), L"wt");
-		}
-		if(m_filemode != L""){
-			record._writeAsUtf8(fps[record.filepath], L"%ls\n", m_filemode.c_str());
-		}
-		record.addToFile(fps[record.filepath]);
-	}
-	std::for_each(fps.begin(), fps.end(), [](const std::pair<std::wstring, FILE*>& e){
-		fclose(e.second);
-	});
+    std::map<std::wstring, FILE*> fps;
+    for(int i = 0; i < (int)this->m_list.size(); i++){
+        Record& record = *m_list[i];
+        if(fps[record.filepath] == NULL){
+            fps[record.filepath] = _wfopen(record.filepath.c_str(), L"wt");
+        }
+        if(m_filemode != L""){
+            record._writeAsUtf8(fps[record.filepath], L"%ls\n", m_filemode.c_str());
+        }
+        record.addToFile(fps[record.filepath]);
+    }
+    std::for_each(fps.begin(), fps.end(), [](const std::pair<std::wstring, FILE*>& e){
+        fclose(e.second);
+    });
 }

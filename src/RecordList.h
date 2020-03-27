@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include <StringLib.h>
 #include "Record.h"
@@ -6,68 +6,70 @@ class ClearStates;
 
 class RecordList{
 public:
-	//ƒRƒ“ƒXƒgƒ‰ƒNƒ^EƒfƒXƒgƒ‰ƒNƒ^
-	RecordList();
-	virtual ~RecordList();
-	// ƒŒƒR[ƒh”»’è
-	bool isValidRecord(const Record& record) const{
-		if(!record.isNormal())return false;
-		if(m_filterLevel == -2){
-			return record.m_markingLevel == 0; // ŠÈ’P‚Ì‚İ
-		}
-		else if(m_filterLevel == -1){
-			return record.m_markingLevel == 1; // š‚Ì‚İ
-		}
-		if(record.m_markingLevel < this->m_filterLevel)return false;
-		return true;
-	}
-	//–â‘è‚Æ‰ğ“š
-	int getTotalCount() const{
-		return (int)m_list.size();
-	}
-	const Record& getTotalAt(int index) const{
-		return *m_list[index];
-	}
+    //ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ãƒ»ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+    RecordList();
+    virtual ~RecordList();
+    // ãƒ¬ã‚³ãƒ¼ãƒ‰åˆ¤å®š
+    bool isValidRecord(const Record& record) const{
+        if(!record.isNormal())return false;
+        if(m_filterLevel == -2){
+            return record.m_markingLevel == 0; // ç°¡å˜ã®ã¿
+        }
+        else if(m_filterLevel == -1){
+            return record.m_markingLevel == 1; // â˜…ã®ã¿
+        }
+        if(record.m_markingLevel < this->m_filterLevel)return false;
+        return true;
+    }
+    //å•é¡Œã¨è§£ç­”
+    int getTotalCount() const{
+        return (int)m_list.size();
+    }
+    const Record& getTotalAt(int index) const{
+        return *m_list[index];
+    }
 
-	void toggleFilter(){
-		// -2:ŠÈ’P‚Ì‚İ
-		// -1:š‚Ì‚İ
-		// 0:‚·‚×‚Ä
-		// 1:šˆÈã
-		// 2:ššˆÈã
+    void toggleFilter(){
+        // -2:ç°¡å˜ã®ã¿
+        // -1:â˜…ã®ã¿
+        // 0:ã™ã¹ã¦
+        // 1:â˜…ä»¥ä¸Š
+        // 2:â˜…â˜…ä»¥ä¸Š
 
-		// -2,-1,0,1,2
-		m_filterLevel++;
-		if(m_filterLevel > 2)m_filterLevel = -2;
-	}
-	int getFilterLevel() const{
-		return m_filterLevel;
-	}
-	mystring getFilterLevelString() const{
-		switch(m_filterLevel){
-		case -2: return L"ŠÈ’P‚Ì‚İ";
-		case -1: return L"š‚Ì‚İ";
-		case 0: return L"‘S•\¦";
-		case 1: return L"šˆÈã";
-		case 2: return L"ššˆÈã";
-		default: return L"H";
-		}
-	}
-	//ƒ|ƒCƒ“ƒ^ƒŠƒXƒg
-	void _listDeleteAll();        //ƒ|ƒCƒ“ƒ^ƒŠƒXƒg‚·‚×‚Äíœ
-	void _listAdd(const wchar_t *p, const mystring& filepath); //ƒ|ƒCƒ“ƒ^ƒŠƒXƒg‚Ì’Ç‰Á
-	//ƒtƒ@ƒCƒ‹
-	bool loadFile(const std::vector<std::wstring>& paths);
-	void saveFile();
-	void dispose();
-	mystring getFileMode() const	{ return m_filemode; }
+        // -2,-1,0,1,2
+        m_filterLevel++;
+        if(m_filterLevel > 2)m_filterLevel = -2;
+    }
+    int getFilterLevel() const{
+        return m_filterLevel;
+    }
+    mystring getFilterLevelString() const{
+        switch(m_filterLevel){
+        case -2: return L"ç°¡å˜ã®ã¿";
+        case -1: return L"â˜…ã®ã¿";
+        case 0: return L"å…¨è¡¨ç¤º";
+        case 1: return L"â˜…ä»¥ä¸Š";
+        case 2: return L"â˜…â˜…ä»¥ä¸Š";
+        default: return L"ï¼Ÿ";
+        }
+    }
+    //ãƒã‚¤ãƒ³ã‚¿ãƒªã‚¹ãƒˆ
+    void _listDeleteAll();        //ãƒã‚¤ãƒ³ã‚¿ãƒªã‚¹ãƒˆã™ã¹ã¦å‰Šé™¤
+    void _listAdd(const wchar_t *p, const mystring& filepath); //ãƒã‚¤ãƒ³ã‚¿ãƒªã‚¹ãƒˆã®è¿½åŠ 
+    //ãƒ•ã‚¡ã‚¤ãƒ«
+    bool loadFile(const std::vector<std::wstring>& paths);
+    void saveFile();
+    void dispose();
+    mystring getFileMode() const    { return m_filemode; }
 private:
-	bool _read(FileStream *in, const mystring& filepath);
+    bool _read(FileStream *in, const mystring& filepath);
+    void _readLine(const mystring& token, int prevMarked, const mystring& filepath, int lineNumber);
+    void _readToken(const mystring& token, int prevMarked, const mystring& filepath, int lineNumber);
 private:
-	mystring			m_filemode;
-	myvector<Record*>	m_list;
-	int ans_flag;
-	// ƒtƒBƒ‹ƒ^ƒŠƒ“ƒOƒŒƒxƒ‹
-	int m_filterLevel; // 0:‘S•\¦ 1:š‚Æšš‚ğ•\¦ 2:šš‚Ì‚İ•\¦
+    mystring            m_filemode;
+    myvector<Record*>   m_list;
+    int ans_flag;
+    // ãƒ•ã‚£ãƒ«ã‚¿ãƒªãƒ³ã‚°ãƒ¬ãƒ™ãƒ«
+    int m_filterLevel; // 0:å…¨è¡¨ç¤º 1:â˜…ã¨â˜…â˜…ã‚’è¡¨ç¤º 2:â˜…â˜…ã®ã¿è¡¨ç¤º
 };
 
