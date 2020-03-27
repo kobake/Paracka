@@ -64,7 +64,7 @@ public:
 private:
     bool _read(FileStream *in, const mystring& filepath);
     void _readLine(const mystring& token, int prevMarked, const mystring& filepath, int lineNumber);
-    void _readToken(const mystring& token, int prevMarked, const mystring& filepath, int lineNumber);
+    void _readToken(const mystring& token, int prevMarked, const mystring& filepath, int lineNumber, const mystring& rawLine);
 private:
     mystring            m_filemode;
     myvector<Record*>   m_list;

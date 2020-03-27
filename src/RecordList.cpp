@@ -143,7 +143,7 @@ void RecordList::_readLine(const mystring& line, int prevMarked, const mystring&
                 }
 
                 // トークン解釈
-                _readToken(token, prevMarked, filepath, lineNumber);
+                _readToken(token, prevMarked, filepath, lineNumber, line);
             }
             else{
                 return;
@@ -151,18 +151,18 @@ void RecordList::_readLine(const mystring& line, int prevMarked, const mystring&
             p = t;
         }
         else {
-            _readToken(p, prevMarked, filepath, lineNumber);
+            _readToken(p, prevMarked, filepath, lineNumber, line);
             return;
         }
     }
 }
 
-void RecordList::_readToken(const mystring& token, int prevMarked, const mystring& filepath, int lineNumber)
+void RecordList::_readToken(const mystring& token, int prevMarked, const mystring& filepath, int lineNumber, const mystring& rawLine)
 {
     if (this->m_filemode == L"#!sequence") {
         wchar_t buf[256];
         swprintf(buf, _countof(buf), L"%d/%d 行目", lineNumber, token.size());
-        m_list.push_back(new NormalRecord(filepath, buf, 0));
+        m_list.push_back(new NormalRecord(filepath, buf, 0, rawLine));
         m_list.back()->m_a = token;
         return;
     }
@@ -174,7 +174,7 @@ void RecordList::_readToken(const mystring& token, int prevMarked, const mystrin
         lastRecord->m_a = token;
     }
     else {
-        m_list.push_back(new NormalRecord(filepath, token, prevMarked));
+        m_list.push_back(new NormalRecord(filepath, token, prevMarked, rawLine));
     }
     
 

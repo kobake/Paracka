@@ -1,95 +1,115 @@
-#pragma once
+ï»¿#pragma once
 
 #include <StringLib.h>
 class RecordList;
 
 class Record{
 public:
-	mystring			filepath;
-	int					m_markingLevel;
-	mystring			m_q;
-	mystring			m_a;
+    mystring            filepath;
+    int                 m_markingLevel;
+    mystring            m_q;
+    mystring            m_a;
 
 public:
-	Record()
-	{
-		m_markingLevel = 0;
-	}
-	virtual ~Record()
-	{
-	}
-	virtual bool isNormal() const	{ return false; }
-	
-	mystring getFileName() const;
+    Record()
+    {
+        m_markingLevel = 0;
+    }
+    virtual ~Record()
+    {
+    }
+    virtual bool isNormal() const   { return false; }
+    
+    mystring getFileName() const;
 
-	void toggleMarking()
-	{
-		m_markingLevel = (m_markingLevel + 1) % 3; //0,1,2
-	}
-	mystring getMarkingString() const
-	{
-		mystring ret = L"";
-		for(int i = 0; i < m_markingLevel; i++){
-			ret += L"š";
-		}
-		return ret;
-	}
-	mystring getMarkingPrefix() const
-	{
-		mystring ret = getMarkingString();
-		if(ret == L"")return L"";
-		else return ret + L"\r\n";
-	}
+    void toggleMarking()
+    {
+        m_markingLevel = (m_markingLevel + 1) % 3; //0,1,2
+    }
+    mystring getMarkingString() const
+    {
+        mystring ret = L"";
+        for(int i = 0; i < m_markingLevel; i++){
+            ret += L"â˜…";
+        }
+        return ret;
+    }
+    mystring getMarkingPrefix() const
+    {
+        mystring ret = getMarkingString();
+        if(ret == L"")return L"";
+        else return ret + L"\r\n";
+    }
 
-	// ƒtƒ@ƒCƒ‹
-	void addToFile(FILE* fp) const
-	{
-		mystring marking = getMarkingString();
-		if(marking.length()){
-			_writeAsUtf8(fp, L"# %ls\n", marking.c_str());
-		}
-		_writeAsUtf8(fp, L"%ls\n", m_q.c_str());
-		if(m_a.length()){
-			_writeAsUtf8(fp, L"%ls\n", m_a.c_str());
-		}
-	}
-	void _writeAsUtf8(FILE* fp, const wchar_t* str, ...) const
-	{
-		// •¶Žš—ñƒtƒH[ƒ}ƒbƒg
-		wchar_t buf[2048];
-		va_list v;
-		va_start(v, str);
-		_vswprintf(buf, str, v);
-		va_end(v);
+    // ãƒ•ã‚¡ã‚¤ãƒ«
+    virtual void addToFile(FILE* fp) const
+    {
+        mystring marking = getMarkingString();
+        if(marking.length()){
+            _writeAsUtf8(fp, L"# %ls\n", marking.c_str());
+        }
+        _writeAsUtf8(fp, L"%ls\n", m_q.c_str());
+        if(m_a.length()){
+            _writeAsUtf8(fp, L"%ls\n", m_a.c_str());
+        }
+    }
+    void _writeAsUtf8(FILE* fp, const wchar_t* str, ...) const
+    {
+        // æ–‡å­—åˆ—ãƒ•ã‚©ãƒ¼ãƒžãƒƒãƒˆ
+        wchar_t buf[2048];
+        va_list v;
+        va_start(v, str);
+        _vswprintf(buf, str, v);
+        va_end(v);
 
-		// UTF8•ÏŠ·
-		std::string utf8 = unicode2utf8(buf);
+        // UTF8å¤‰æ›
+        std::string utf8 = unicode2utf8(buf);
 
-		// ‘‚«ž‚Ý
-		fwrite(utf8.c_str(), 1, utf8.length(), fp);
-	}
+        // æ›¸ãè¾¼ã¿
+        fwrite(utf8.c_str(), 1, utf8.length(), fp);
+    }
 
-	
+    
 };
 
 
 
 class NormalRecord : public Record{
 public:
-	NormalRecord(const mystring& filepath, const mystring& q, int markingLevel)
-	{
-		this->filepath = filepath;
-		this->m_q = q;
-		this->m_markingLevel = markingLevel;
-	}
-	virtual bool isNormal() const	{ return true; }
+    NormalRecord(const mystring& filepath, const mystring& q, int markingLevel, const mystring& rawLine)
+    {
+        this->filepath = filepath;
+        this->m_q = q;
+        this->m_markingLevel = markingLevel;
+        this->m_rawLine = rawLine;
+    }
+    virtual bool isNormal() const   { return true; }
+
+    virtual void addToFile(FILE* fp) const
+    {
+        mystring marking = getMarkingString();
+        if (marking.length()) {
+            _writeAsUtf8(fp, L"# %ls\n", marking.c_str());
+        }
+        if (m_rawLine.find(L"\t" + m_a) != std::wstring::npos) {
+            _writeAsUtf8(fp, L"%ls\n", m_rawLine.c_str());
+        }
+        else {
+            _writeAsUtf8(fp, L"%ls\n", m_q.c_str());
+            if (m_a.length()) {
+                _writeAsUtf8(fp, L"%ls\n", m_a.c_str());
+            }
+        }
+    }
+public:
+    mystring m_rawLine;
 };
 
 class CommentRecord : public Record{
 public:
-	CommentRecord(const mystring& filepath, const mystring& text)
-	{
-		this->filepath = filepath;
-		this->m_q = text;
-	}
+    CommentRecord(const mystring& filepath, const mystring& text)
+    {
+        this->filepath = filepath;
+        this->m_q = text;
+    }
 };
