@@ -11,8 +11,6 @@ MainWindow *winMain;
 
 int AppInit(int argc,const wchar_t* argv[],int nCmdShow)
 {
-    int n = 0b0101;
-    exit(0);
     if(argc>=2){
         static_cast<Paracka*>(g_app)->fs->GetPath().SetFullPath(argv[1]);
     }
