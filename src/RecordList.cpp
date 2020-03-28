@@ -131,27 +131,25 @@ void RecordList::_readLine(const mystring& line, int prevMarked, const mystring&
 {
     mystring token = L"";
     const wchar_t* p = line.c_str();
-    while (1) {
+    while (*p) {
         while (*p == L'\t') p++;
         const wchar_t* t = wcschr(p, '\t');
+        mystring token = p;
         if (t) {
-            mystring token(p, t);
-            if (token.length() >= 1) {
-                // コメントスキップ
-                if (token.startsWith(L"//") || token.startsWith(L"#")) {
-                    return;
-                }
-
-                // トークン解釈
-                _readToken(token, prevMarked, filepath, lineNumber, line);
-            }
-            else{
-                return;
-            }
+            token.assign(p, t);
             p = t;
         }
         else {
-            _readToken(p, prevMarked, filepath, lineNumber, line);
+            p = wcschr(p, '\0');
+        }
+        // コメントスキップ
+        if (token.startsWith(L"//") || token.startsWith(L"#")) {
+            return;
+        }
+        else if (token.length() >= 1) {
+            _readToken(token, prevMarked, filepath, lineNumber, line);
+        }
+        else {
             return;
         }
     }
